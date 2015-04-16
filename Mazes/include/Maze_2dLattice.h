@@ -1,13 +1,13 @@
 #ifndef MAZE_2DLATTICE_H
 #define MAZE_2DLATTICE_H
 
+#include "Maze_ADT.h"
 
-class Maze_2dLattice : Maze_ADT
+class Maze_2dLattice : public Maze_ADT
 {
     public:
         Maze_2dLattice();
         virtual ~Maze_2dLattice();
-    protected:
 
         /* This should return the number "nodes" in the maze.
          */
@@ -22,6 +22,7 @@ class Maze_2dLattice : Maze_ADT
          */
         virtual std::map<Edge, EdgeList> getConflicts();
 
+    protected:
     private:
 
         // 10 by 10 maze.

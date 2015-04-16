@@ -1,4 +1,4 @@
-#include "EdgeList.h"
+#include "../include/EdgeList.h"
 
 EdgeList::EdgeList()
 {
@@ -8,4 +8,9 @@ EdgeList::EdgeList()
 EdgeList::~EdgeList()
 {
     //dtor
+}
+
+void EdgeList::shuffle()
+{
+
 }

@@ -1,6 +1,8 @@
 #ifndef EDGELIST_H
 #define EDGELIST_H
 
+#include <vector>
+#include "Edge.h"
 
 class EdgeList
 {
@@ -9,11 +11,11 @@ class EdgeList
         virtual ~EdgeList();
 
         // Stores a list of vertex1, vertex2 pairs.
-        std:vector<int> vertex1;
-        std:vector<int> vertex2;
+        std::vector<int> vertex1;
+        std::vector<int> vertex2;
 
         // Explicit edge objects.
-        std:vector<Edge> edges;
+        std::vector<Edge> edges;
 
 
         void addEdge(int v1, int v2);
@@ -21,9 +23,14 @@ class EdgeList
         // Randomizes the order of the edge list.
         void shuffle();
 
-        void getSize()
+        unsigned int getSize()
         {
             return vertex1.size();
+        }
+
+        std::vector<Edge> getEdges()
+        {
+            return edges;
         }
 
     protected:

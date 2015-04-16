@@ -1,10 +1,11 @@
-#include "UF_Serial.h"
+#include "../include/UF_Serial.h"
+#include <stdlib.h>
 
-UF_Serial::UF_Serial(int size)
+UF_Serial::UF_Serial(int size) : UF_ADT(size)
 {
-    parents = (int*) malloc(sizeof(int)*size);
-    ranks   = (int*) malloc(sizeof(int)*size);
-    this.size = size;
+    this->parents = (int*) malloc(sizeof(int)*size);
+    this->ranks   = (int*) malloc(sizeof(int)*size);
+    this->size = size;
 
     for(int i = 0; i < size; i++)
     {
@@ -21,9 +22,9 @@ UF_Serial::~UF_Serial()
 
 void UF_Serial::op_union(EdgeList edgeList)
 {
-    std::vector<int> v1 = edgeList -> vertex1;
-    std::vector<int> v2 = edgeList -> vertex2;
-    int len = edgeList ->vertex1 ->size();
+    std::vector<int> v1 = edgeList.vertex1;
+    std::vector<int> v2 = edgeList.vertex2;
+    int len = edgeList.vertex1.size();
 
     for(int i = 0; i < len; i++)
     {
@@ -33,7 +34,7 @@ void UF_Serial::op_union(EdgeList edgeList)
 
 void UF_Serial::op_union(int v1, int v2)
 {
-    link(op_find(e1), op_find(e2));
+    link(op_find(v1), op_find(v2));
 }
 
 int UF_Serial::op_find(int vertex)

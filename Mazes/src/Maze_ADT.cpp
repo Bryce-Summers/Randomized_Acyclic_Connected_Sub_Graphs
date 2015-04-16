@@ -1,4 +1,4 @@
-#include "Maze_ADT.h"
+#include "../include/Maze_ADT.h"
 
 // -- Constructor.
 Maze_ADT::Maze_ADT()

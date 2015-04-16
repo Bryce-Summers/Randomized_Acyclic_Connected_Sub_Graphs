@@ -1,4 +1,4 @@
-#include "Maze_2dLattice.h"
+#include "../include/Maze_2dLattice.h"
 
 Maze_2dLattice::Maze_2dLattice()
 {
@@ -20,7 +20,7 @@ int Maze_2dLattice::getNumberOfVertices()
 // Returns the characteristic Edge List containing all possible edges.
 EdgeList Maze_2dLattice::populateEdgeList()
 {
-
+    return EdgeList();
 }
 
 /*
@@ -29,5 +29,5 @@ EdgeList Maze_2dLattice::populateEdgeList()
  */
 std::map<Edge, EdgeList> Maze_2dLattice::getConflicts()
 {
-
+    return std::map<Edge,EdgeList>();
 }

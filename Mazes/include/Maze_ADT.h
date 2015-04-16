@@ -1,6 +1,9 @@
 #ifndef MAZE_ADT_H
 #define MAZE_ADT_H
 
+#include "Graph.h"
+#include <map>
+
 /*
  * The Maze interface, written by Bryce Summers on 4/12/2015.
  *
@@ -14,21 +17,21 @@ class Maze_ADT
         Maze_ADT();
         virtual ~Maze_ADT();
 
-    protected:
 
         /* This should return the number "nodes" in the maze.
          */
-        virtual int getNumberOfVertices();
+        virtual int getNumberOfVertices() = 0;
 
         // Returns the characteristic Edge List containing all possible edges.
-        virtual EdgeList populateEdgeList();
+        virtual EdgeList populateEdgeList() = 0;
 
         /*
          * This method should return a list of the nodes representing
          *
          */
-        virtual std::map<Edge, EdgeList> getConflicts();
+        virtual std::map<Edge, EdgeList> getConflicts() = 0;
 
+    protected:
     private:
 };
 

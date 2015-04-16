@@ -1,6 +1,7 @@
 #ifndef UF_SERIAL_H
 #define UF_SERIAL_H
 
+#include "UF_ADT.h"
 /*
  * Written By Bryce Summers on 4/12/2015.
  *
@@ -8,15 +9,15 @@
  *
  */
 
-class UF_Serial : UF_ADT
+class UF_Serial : public UF_ADT
 {
     public:
-        UF_Serial();
-        virtual ~UF_Serial();
+        UF_Serial(int size);
+        ~UF_Serial();
 
-        virtual void op_union(EdgeList edgeList);
-        virtual void op_union(int v1, int v2);
-        virtual int op_find(int vertex);
+        void op_union(EdgeList edgeList);
+        void op_union(int v1, int v2);
+        int op_find(int vertex);
 
     protected:
     private:

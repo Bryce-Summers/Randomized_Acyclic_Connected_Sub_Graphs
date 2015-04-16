@@ -1,12 +1,17 @@
 #include <iostream>
+#include <set>
+#include "include/Maze.h"
+#include "include/Graph.h"
+#include "include/UF.h"
 
 using namespace std;
 
 void maze_serial()
 {
-    Maze_ADT maze = new Maze_2dLattice();
+    //Maze_ADT maze = Maze_2dLattice();
+    Maze_2dLattice maze = Maze_2dLattice();
 
-    UF_ADT UF = new UF_Serial(maze.getNumberOfVertices());
+    UF_Serial UF = UF_Serial(maze.getNumberOfVertices());
 
     EdgeList edges = maze.populateEdgeList();
 
@@ -16,7 +21,7 @@ void maze_serial()
     map<Edge, EdgeList> conflict_map;
 
     // Create a new set to track the edges that may not be added to the maze.
-    set<Edge> forbidden;
+    std::set<Edge> forbidden;
 
     // FIXME : Make sure this cpp code compiles and works.
     int len = edges.getSize();
@@ -28,19 +33,20 @@ void maze_serial()
         int v1 = e.vertex_1;
         int v2 = e.vertex_2;
 
-        if(!forbidden.contains(e) && !UF.connected(v1, v2))
+
+        if((forbidden.find(e) != forbidden.end()) && !UF.connected(v1, v2))
         {
             // Connect sets spanned by the edge.
             UF.op_union(e.vertex_1, e.vertex_2);
 
-            EdgeList conflicts = conflict_map[e];
+            std::vector<Edge> conflicts = conflict_map[e].getEdges();
 
             // FIXME : Do we need to add e as well, or will it be in its own conflict map.
-            forbidden.add(e);
+            forbidden.insert(e);
 
             for(Edge e2 : conflicts)
             {
-                forbidden.add(e2);
+                forbidden.insert(e2);
             }
         }
     }
