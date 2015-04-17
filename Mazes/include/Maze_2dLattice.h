@@ -26,7 +26,7 @@ class Maze_2dLattice : public Maze_ADT
     private:
 
         // 10 by 10 maze.
-        int size = 10;
+        const static int size = 10;
 };
 
 #endif // MAZE_2DLATTICE_H

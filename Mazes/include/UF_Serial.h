@@ -19,6 +19,9 @@ class UF_Serial : public UF_ADT
         void op_union(int v1, int v2);
         int op_find(int vertex);
 
+
+        bool connected(int v1, int v2);
+
     protected:
     private:
 

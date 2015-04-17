@@ -39,14 +39,14 @@
 		<Unit filename="include/Maze_2dLattice.h" />
 		<Unit filename="include/Maze_ADT.h" />
 		<Unit filename="include/UF_Serial.h" />
-		<Unit filename="include/UF_Structure.h" />
+		<Unit filename="include/UF_ADT.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Edge.cpp" />
 		<Unit filename="src/EdgeList.cpp" />
 		<Unit filename="src/Maze_2dLattice.cpp" />
 		<Unit filename="src/Maze_ADT.cpp" />
 		<Unit filename="src/UF_Serial.cpp" />
-		<Unit filename="src/UF_Structure.cpp" />
+		<Unit filename="src/UF_ADT.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

@@ -44,8 +44,10 @@ void maze_serial()
             // FIXME : Do we need to add e as well, or will it be in its own conflict map.
             forbidden.insert(e);
 
-            for(Edge e2 : conflicts)
+            int len = conflicts.size();
+            for(int i = 0; i < len; i++)
             {
+                Edge e2 = conflicts[i];
                 forbidden.insert(e2);
             }
         }

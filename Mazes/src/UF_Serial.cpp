@@ -1,6 +1,7 @@
 #include "../include/UF_Serial.h"
 #include <stdlib.h>
 
+
 UF_Serial::UF_Serial(int size) : UF_ADT(size)
 {
     this->parents = (int*) malloc(sizeof(int)*size);
@@ -30,6 +31,11 @@ void UF_Serial::op_union(EdgeList edgeList)
     {
         op_union(v1[i], v2[i]);
     }
+}
+
+bool UF_Serial::connected(int v1, int v2)
+{
+    return op_find(v1) == op_find(v2);
 }
 
 void UF_Serial::op_union(int v1, int v2)

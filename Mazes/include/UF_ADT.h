@@ -14,17 +14,14 @@
 class UF_ADT
 {
     public:
-        UF_ADT(int size);
+        UF_ADT(int sizes);
         virtual ~UF_ADT() = 0;
 
         virtual void op_union(EdgeList edgeList) = 0;
         virtual void op_union(int v1, int v2) = 0;
         virtual int op_find(int vertex) = 0;
 
-        bool connected (int v1, int v2)
-        {
-            return op_find(v1) == op_find(v2);
-        }
+        virtual bool connected (int v1, int v2) = 0;
 
         // The Data.
         int * parents;
