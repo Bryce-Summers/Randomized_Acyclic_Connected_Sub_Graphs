@@ -2,6 +2,10 @@
 #define UF_ADT_H
 
 #include "Graph.h"
+
+#include <mutex>
+
+
 /*
  * Written by Bryce Summers on 4/12/2015.
  *
@@ -15,6 +19,7 @@ class UF_ADT
 {
     public:
         UF_ADT(int sizes);
+
         virtual ~UF_ADT() = 0;
 
         virtual void op_union(EdgeList edgeList) = 0;

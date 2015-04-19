@@ -29,6 +29,8 @@ class Tester
         // Throws an error if it does not pass.
         void ASSERT(bool predicate);
 
+        void test_then_union(UF_ADT UF, int v1, int v2);
+
 };
 
 #endif // TESTER_H

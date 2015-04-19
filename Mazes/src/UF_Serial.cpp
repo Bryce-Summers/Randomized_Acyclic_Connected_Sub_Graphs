@@ -1,18 +1,10 @@
 #include "../include/UF_Serial.h"
 #include <stdlib.h>
 
-
+// -- Constructor.
 UF_Serial::UF_Serial(int size) : UF_ADT(size)
 {
-    this->parents = (int*) malloc(sizeof(int)*size);
-    this->ranks   = (int*) malloc(sizeof(int)*size);
-    this->size = size;
 
-    for(int i = 0; i < size; i++)
-    {
-        parents[i] = i;
-        ranks[i]   = 0;
-    }
 }
 
 UF_Serial::~UF_Serial()
