@@ -19,6 +19,9 @@ class UF_ADT
 
         virtual void op_union(EdgeList edgeList) = 0;
         virtual void op_union(int v1, int v2) = 0;
+
+        // Guaranteed to be valid for sequential implementations.
+        // For concurrent usage using comparison checks, please use connected instead.
         virtual int op_find(int vertex) = 0;
 
         virtual bool connected (int v1, int v2) = 0;

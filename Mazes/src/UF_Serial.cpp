@@ -43,10 +43,10 @@ void UF_Serial::op_union(int v1, int v2)
     link(op_find(v1), op_find(v2));
 }
 
+/* // Recursive Version of find.
 int UF_Serial::op_find(int vertex)
 {
     int parent = parents[vertex];
-
 
     if(parent != vertex)
     {
@@ -58,6 +58,38 @@ int UF_Serial::op_find(int vertex)
     }
 
     return parent;
+}*/
+
+int UF_Serial::op_find(int vertex_initial)
+{
+    // 1st transversal, find the root.
+
+    int vertex = vertex_initial;
+
+    int parent = parents[vertex];
+
+    while(parent != vertex)
+    {
+        vertex = parent;
+        parent = parents[vertex];
+    }
+
+    int root = vertex;
+
+
+    // Second transversal, path compression.
+
+    vertex = vertex_initial;
+    parent = parents[vertex];
+
+    while(parent != vertex)
+    {
+        parents[vertex] = root;
+        vertex = parent;
+        parent = parents[vertex];
+    }
+
+    return root;
 }
 
 // Union by Rank.

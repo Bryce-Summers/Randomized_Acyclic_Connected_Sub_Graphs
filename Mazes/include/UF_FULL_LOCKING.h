@@ -19,6 +19,9 @@ class UF_FULL_LOCKING  : public UF_ADT
 
     protected:
     private:
+
+        // Links two root elements.
+        void link(int v1, int v2);
 };
 
 #endif // UF_FULL_LOCKING_H
