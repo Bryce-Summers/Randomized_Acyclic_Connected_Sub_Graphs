@@ -1,6 +1,8 @@
 #include "../include/UF_HAND_OVER_HAND_LOCKING.h"
 #include <stdlib.h>
 
+// BL: Locality of structure should be revisited
+
 // -- Constructor.
 UF_HAND_OVER_HAND_LOCKING::UF_HAND_OVER_HAND_LOCKING(int size) : UF_ADT(size)
 {
@@ -38,6 +40,11 @@ int UF_HAND_OVER_HAND_LOCKING::op_find(int vertex_initial)
 
     while(parent != vertex)
     {
+        // BL: We want to keep track of prev vertex
+        // and unlock it too
+        // want to do something like this:
+        // unlock(vertex)
+        // ...
         vertex = parent;
         lock(vertex);
         parent = parents[vertex];
@@ -45,9 +52,14 @@ int UF_HAND_OVER_HAND_LOCKING::op_find(int vertex_initial)
 
     int root = vertex;
 
-
     // Second transversal, path compression.
 
+    // BL: Unlock root
+    // unlock(root);
+    // do the updates, we don't need root locked,
+    // cause we know the node will not be deleted,
+    // and we are just getting a pointer to it
+    // so code should look identical to previous one
     vertex = vertex_initial;
     parent = parents[vertex];
 
@@ -72,6 +84,9 @@ void UF_HAND_OVER_HAND_LOCKING::link(int v1, int v2)
 	{
 		return;
 	}
+
+    // BL: There is a TOCTTOU bug here. Can't factor this without
+    // assumptions
 
     lock(v1);
     lock(v2);
@@ -112,7 +127,7 @@ void UF_HAND_OVER_HAND_LOCKING::link(int v1, int v2)
 
 void UF_HAND_OVER_HAND_LOCKING::lock(int vert)
 {
-    locks[vert].lock;
+    locks[vert].lock; // BL: lock()? 
 }
 
 void UF_HAND_OVER_HAND_LOCKING::unlock(int vert)
