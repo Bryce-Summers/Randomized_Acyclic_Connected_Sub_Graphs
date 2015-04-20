@@ -27,6 +27,9 @@ class Tester
         // FIXME : Move the main.cpp code here.
         bool test(Maze_ADT &maze, UF_ADT &UF);
 
+        // Returns true iff the list of edges is connected and acyclic.
+        bool connected_and_acyclic(EdgeList edgeList, int num_nodes);
+
     protected:
     private:
 

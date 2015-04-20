@@ -122,3 +122,41 @@ void Tester::ASSERT(bool predicate)
     }
 }
 
+// Returns true iff the list of edges defines a subgraph on a graph with
+// contiguous nodes labeled [0, num_nodes) is connected and acyclic.
+bool Tester::connected_and_acyclic(EdgeList edgeList, int num_nodes)
+{
+    UF_Serial UF = UF_Serial(num_nodes);
+
+    std::vector<int> v_list_1 = edgeList.vertex1;
+    std::vector<int> v_list_2 = edgeList.vertex2;
+    int len = edgeList.vertex1.size();
+
+    // Make all of the edge connections, while checking for acyclicness.
+    for(int i = 0; i < len; i++)
+    {
+        int v1 = v_list_1[i];
+        int v2 = v_list_2[i];
+
+        // This edge would introduce a cycle.
+        if(UF->connected(v1, v2))
+        {
+            return false;
+        }
+
+        UF->op_union(v1[i], v2[i]);
+    }
+
+    int root = UF->op_find(0);
+    for(int i = 1 ; i < num_nodes; i++)
+    {
+        // Not connected.
+        if(root != UF->op_find(i))
+        {
+            return false;
+        }
+    }
+
+    return true;
+
+}
