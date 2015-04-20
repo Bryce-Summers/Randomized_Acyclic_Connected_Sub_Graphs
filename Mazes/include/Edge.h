@@ -56,7 +56,7 @@ class Edge
         size_t operator()(const Edge& e) const
         {
             size_t hash_1 = std::hash<int>()(e.vertex_1);
-            size_t hash_2 = std::hash<int>()(e.vertex_2);
+            size_t hash_2 = std::hash<size_t>()(std::hash<int>()(e.vertex_2));
 
             return std::hash<size_t>()(hash_1 ^ hash_2);
         }
