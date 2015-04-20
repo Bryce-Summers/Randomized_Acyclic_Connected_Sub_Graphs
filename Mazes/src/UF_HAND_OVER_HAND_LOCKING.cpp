@@ -127,7 +127,7 @@ void UF_HAND_OVER_HAND_LOCKING::link(int v1, int v2)
 
 void UF_HAND_OVER_HAND_LOCKING::lock(int vert)
 {
-    locks[vert].lock; // BL: lock()? 
+    locks[vert].lock();
 }
 
 void UF_HAND_OVER_HAND_LOCKING::unlock(int vert)
