@@ -2,6 +2,15 @@
 #define UF_HAND_OVER_HAND_LOCKING_H
 
 
+/*
+ * Per Node locks implementation.
+ * This implementation allows synchronization at the node level.
+ *
+ * Written By Bryce Summers on 4/19/2015.
+ *
+ */
+
+
 class UF_HAND_OVER_HAND_LOCKING  : public UF_ADT
 {
     public:
@@ -17,6 +26,11 @@ class UF_HAND_OVER_HAND_LOCKING  : public UF_ADT
 
     protected:
     private:
+
+        std::mutex * locks; // Mutexes for every element.
+
+        void lock(int vert);
+        void unlock(int vert);
 };
 
 #endif // UF_HAND_OVER_HAND_LOCKING_H

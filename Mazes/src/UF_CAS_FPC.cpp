@@ -75,6 +75,7 @@ bool UF_CAS_FPC::connected(int v1, int v2)
     int root1 = op_find(v1);
     int root2 = op_find(v2);
 
+    // FIXME Handle degeneracies.
 
     return parent[root1] == parent[root2];
 

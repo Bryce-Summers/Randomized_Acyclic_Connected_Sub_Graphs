@@ -9,8 +9,6 @@ UF_Serial::UF_Serial(int size) : UF_ADT(size)
 
 UF_Serial::~UF_Serial()
 {
-    free(parents);
-    free(ranks);
 }
 
 bool UF_Serial::connected(int v1, int v2)

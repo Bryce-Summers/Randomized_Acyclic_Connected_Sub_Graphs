@@ -16,7 +16,8 @@ UF_ADT::UF_ADT(int size)
 
 UF_ADT::~UF_ADT()
 {
-    //dtor
+    free(parents);
+    free(ranks);
 }
 
 // Naive implementation.

@@ -16,7 +16,7 @@ class UF_Serial : public UF_ADT
         UF_Serial(int size);
         ~UF_Serial();
 
-        void op_union(EdgeList edgeList);
+       // void op_union(EdgeList edgeList);
         void op_union(int v1, int v2);
         int op_find(int vertex);
 
