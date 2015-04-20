@@ -122,7 +122,8 @@ void Tester::ASSERT(bool predicate)
     }
 }
 
-// Returns true iff the list of edges is connected and acyclic.
+// Returns true iff the list of edges defines a subgraph on a graph with
+// contiguous nodes labeled [0, num_nodes) is connected and acyclic.
 bool Tester::connected_and_acyclic(EdgeList edgeList, int num_nodes)
 {
     UF_Serial UF = UF_Serial(num_nodes);
