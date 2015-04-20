@@ -14,7 +14,7 @@
 class UF_HAND_OVER_HAND_LOCKING  : public UF_ADT
 {
     public:
-        UF_HAND_OVER_HAND_LOCKING();
+        UF_HAND_OVER_HAND_LOCKING(int size);
         virtual ~UF_HAND_OVER_HAND_LOCKING();
 
         void op_union(EdgeList edgeList);
@@ -27,6 +27,10 @@ class UF_HAND_OVER_HAND_LOCKING  : public UF_ADT
     protected:
     private:
 
+        // The Data.
+        int * parents;
+        int * ranks;
+        int size;
         std::mutex * locks; // Mutexes for every element.
 
         void lock(int vert);

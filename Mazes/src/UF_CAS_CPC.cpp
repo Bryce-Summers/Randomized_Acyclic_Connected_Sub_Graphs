@@ -1,11 +1,20 @@
 #include "UF_CAS_CPC.h"
 
-UF_CAS_CPC::UF_CAS_CPC()
+UF_CAS_CPC::UF_CAS_CPC(int size)
 {
-    //ctor
+    this->parents = (int*) malloc(sizeof(int)*size);
+    this->ranks   = (int*) malloc(sizeof(int)*size);
+    this->size = size;
+
+    for(int i = 0; i < size; i++)
+    {
+        parents[i] = i;
+        ranks[i]   = 0;
+    }
 }
 
 UF_CAS_CPC::~UF_CAS_CPC()
 {
-    //dtor
+    free(parents);
+    free(ranks);
 }

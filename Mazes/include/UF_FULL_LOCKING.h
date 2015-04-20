@@ -12,7 +12,7 @@
 class UF_FULL_LOCKING  : public UF_ADT
 {
     public:
-        UF_FULL_LOCKING();
+        UF_FULL_LOCKING(int size);
         virtual ~UF_FULL_LOCKING();
 
 
@@ -35,7 +35,12 @@ class UF_FULL_LOCKING  : public UF_ADT
         void lock_all();
         void unlock_all();
 
-    std::mutex lock_all;
+        std::mutex lock_all;
+
+            // The Data.
+        int * parents;
+        int * ranks;
+        int size;
 
 };
 

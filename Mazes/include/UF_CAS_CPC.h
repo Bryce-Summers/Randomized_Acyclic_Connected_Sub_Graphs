@@ -9,7 +9,7 @@
 class UF_CAS_CPC  : public UF_ADT
 {
     public:
-        UF_CAS_CPC();
+        UF_CAS_CPC(int size);
         virtual ~UF_CAS_CPC();
 
         void op_union(EdgeList edgeList);
@@ -21,6 +21,11 @@ class UF_CAS_CPC  : public UF_ADT
 
     protected:
     private:
+
+        // The Data.
+        int * parents;
+        int * ranks;
+        int size;
 };
 
 #endif // UF_CAS_CPC_H

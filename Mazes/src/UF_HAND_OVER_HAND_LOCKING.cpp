@@ -10,7 +10,7 @@
  * Features locks for ever node.
  * Hand over Hand locking is used.
  *
- * Invariants : All nodes are greater than their parents.
+ * Invariants : All nodes are greater than or equal to their parents.
  *
  * Implementation details :
  * 1. All locks should be taken in descending order.
@@ -25,12 +25,27 @@
 // -- Constructor.
 UF_HAND_OVER_HAND_LOCKING::UF_HAND_OVER_HAND_LOCKING(int size) : UF_ADT(size)
 {
-    locks = (std::mutex *)malloc(sizeof(std::mutex) * size);
+
+    this->parents = (int*) malloc(sizeof(int)*size);
+    this->ranks   = (int*) malloc(sizeof(int)*size);
+    this->size = size;
+
+    for(int i = 0; i < size; i++)
+    {
+        parents[i] = i;
+        ranks[i]   = 0;
+    }
+
+    this->locks = (std::mutex *)malloc(sizeof(std::mutex) * size);
 }
 
 
-UF_HAND_OVER_HAND_LOCKING::~UF_ADT()
+UF_HAND_OVER_HAND_LOCKING::~UF_HAND_OVER_HAND_LOCKING()
 {
+
+    free(parents);
+    free(ranks);
+
     free(locks);
 
     // CPP should automatically call the superclass destructor.

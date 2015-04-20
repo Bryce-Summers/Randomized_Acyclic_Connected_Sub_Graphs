@@ -21,7 +21,7 @@ class UF_ADT
     public:
 
         // Should only be called once!
-        UF_ADT(int sizes);
+        UF_ADT();
 
         virtual ~UF_ADT() = 0;
 
@@ -42,11 +42,6 @@ class UF_ADT
          * disconnected at beginning, disconnected at end --> false.
          */
         virtual bool connected (int v1, int v2) = 0;
-
-        // The Data.
-        int * parents;
-        int * ranks;
-        int size;
 
     protected:
     private:

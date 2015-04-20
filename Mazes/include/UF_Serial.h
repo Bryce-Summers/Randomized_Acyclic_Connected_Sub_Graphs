@@ -28,6 +28,11 @@ class UF_Serial : public UF_ADT
 
         // Links two root elements.
         void link(int v1, int v2);
+
+    // The Data.
+    int * parents;
+    int * ranks;
+    int size;
 };
 
 #endif // UF_SERIAL_H

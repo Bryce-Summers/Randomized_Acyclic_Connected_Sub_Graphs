@@ -4,11 +4,21 @@
 // -- Constructor.
 UF_Serial::UF_Serial(int size) : UF_ADT(size)
 {
+    this->parents = (int*) malloc(sizeof(int)*size);
+    this->ranks   = (int*) malloc(sizeof(int)*size);
+    this->size = size;
 
+    for(int i = 0; i < size; i++)
+    {
+        parents[i] = i;
+        ranks[i]   = 0;
+    }
 }
 
 UF_Serial::~UF_Serial()
 {
+    free(parents);
+    free(ranks);
 }
 
 bool UF_Serial::connected(int v1, int v2)
@@ -16,9 +26,10 @@ bool UF_Serial::connected(int v1, int v2)
     return op_find(v1) == op_find(v2);
 }
 
-void UF_Serial::op_union(int v1, int v2)
+bool UF_Serial::op_union(int v1, int v2)
 {
     link(op_find(v1), op_find(v2));
+    return true;
 }
 
 /* // Recursive Version of find.

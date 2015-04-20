@@ -1,23 +1,14 @@
 #include "../include/UF_ADT.h"
 
 
-UF_ADT::UF_ADT(int size)
+UF_ADT::UF_ADT()
 {
-    this->parents = (int*) malloc(sizeof(int)*size);
-    this->ranks   = (int*) malloc(sizeof(int)*size);
-    this->size = size;
 
-    for(int i = 0; i < size; i++)
-    {
-        parents[i] = i;
-        ranks[i]   = 0;
-    }
 }
 
 UF_ADT::~UF_ADT()
 {
-    free(parents);
-    free(ranks);
+
 }
 
 // Naive implementation.

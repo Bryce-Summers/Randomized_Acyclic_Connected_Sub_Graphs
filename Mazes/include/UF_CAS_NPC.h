@@ -5,7 +5,7 @@
 class UF_CAS_NPC : public UF_ADT
 {
     public:
-        UF_CAS_NPC();
+        UF_CAS_NPC(int size);
         virtual ~UF_CAS_NPC();
 
         // This is implemented naively in ADT at the moment. */
@@ -17,6 +17,11 @@ class UF_CAS_NPC : public UF_ADT
 
     protected:
     private:
+
+        // The Data.
+        int * parents;
+        int * ranks;
+        int size;
 };
 
 #endif // UF_CAS_NPC_H

@@ -3,12 +3,21 @@
 
 UF_FULL_LOCKING::UF_FULL_LOCKING() : UF_ADT()
 {
-    //ctor
+    this->parents = (int*) malloc(sizeof(int)*size);
+    this->ranks   = (int*) malloc(sizeof(int)*size);
+    this->size = size;
+
+    for(int i = 0; i < size; i++)
+    {
+        parents[i] = i;
+        ranks[i]   = 0;
+    }
 }
 
 UF_FULL_LOCKING::~UF_FULL_LOCKING()
 {
-    //dtor
+    free(parents);
+    free(ranks);
 }
 
 // -- Constructor.

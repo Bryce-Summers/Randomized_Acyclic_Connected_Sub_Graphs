@@ -13,9 +13,23 @@
  * Would using an alternative total ordering improve cache behavior?
  */
 
-UF_CAS_FPC::UF_CAS_FPC() : UF_ADT(size)
+UF_CAS_FPC::UF_CAS_FPC(int size) : UF_ADT()
 {
-    /* Do Nothing. */
+    this->parents = (int*) malloc(sizeof(int)*size);
+    this->ranks   = (int*) malloc(sizeof(int)*size);
+    this->size = size;
+
+    for(int i = 0; i < size; i++)
+    {
+        parents[i] = i;
+        ranks[i]   = 0;
+    }
+}
+
+UF_CAS_FPC::~UF_CAS_FPC()
+{
+    free(parents);
+    free(ranks);
 }
 
 
