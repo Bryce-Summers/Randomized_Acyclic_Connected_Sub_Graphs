@@ -19,6 +19,19 @@ UF_ADT::~UF_ADT()
     //dtor
 }
 
+// Naive implementation.
+void UF_ADT::op_union(EdgeList edgeList)
+{
+    std::vector<int> v1 = edgeList.vertex1;
+    std::vector<int> v2 = edgeList.vertex2;
+    int len = edgeList.vertex1.size();
+
+    for(int i = 0; i < len; i++)
+    {
+        op_union(v1[i], v2[i]);
+    }
+}
+
 /* Resizes the F structure to the given size.
  * and disassociates all of the sets.
  */

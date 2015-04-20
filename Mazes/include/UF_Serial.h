@@ -7,6 +7,7 @@
  *
  * Purpose : This is a standard serial implementation of a Union Find Data structure.
  *
+ * Updated: 4/19/2015 : Converted find from a recursive to an iterative implementation.
  */
 
 class UF_Serial : public UF_ADT

@@ -12,7 +12,7 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
-					<Add option="-g" />
+					<Add option="-g -std=c++11" />
 					<Add directory="include" />
 				</Compiler>
 			</Target>
@@ -40,6 +40,7 @@
 		<Unit filename="include/Maze_ADT.h" />
 		<Unit filename="include/UF_Serial.h" />
 		<Unit filename="include/UF_ADT.h" />
+		<Unit filename="include/Tester.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Edge.cpp" />
 		<Unit filename="src/EdgeList.cpp" />
@@ -47,6 +48,7 @@
 		<Unit filename="src/Maze_ADT.cpp" />
 		<Unit filename="src/UF_Serial.cpp" />
 		<Unit filename="src/UF_ADT.cpp" />
+		<Unit filename="src/Tester.cpp"/>
 		<Extensions>
 			<code_completion />
 			<envvars />

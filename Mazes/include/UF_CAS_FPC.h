@@ -3,7 +3,9 @@
 
 /*
  * Union Find, Compare and Swap based lock free, Full Path compression.
- * Written by Bryce Summers.
+ * Written by Bryce Summers on 4/19/2015.
+ *
+ * This implementation is non blocking and is lock free.
  */
 
 class UF_CAS_FPC  : public UF_ADT
@@ -12,10 +14,10 @@ class UF_CAS_FPC  : public UF_ADT
         UF_CAS_FPC();
         virtual ~UF_CAS_FPC();
 
-        void op_union(EdgeList edgeList);
+        // This is implemented naively in ADT at the moment. */
+        //void op_union(EdgeList edgeList);
         void op_union(int v1, int v2);
         int op_find(int vertex);
-
 
         bool connected(int v1, int v2);
 

@@ -13,18 +13,6 @@ UF_Serial::~UF_Serial()
     free(ranks);
 }
 
-void UF_Serial::op_union(EdgeList edgeList)
-{
-    std::vector<int> v1 = edgeList.vertex1;
-    std::vector<int> v2 = edgeList.vertex2;
-    int len = edgeList.vertex1.size();
-
-    for(int i = 0; i < len; i++)
-    {
-        op_union(v1[i], v2[i]);
-    }
-}
-
 bool UF_Serial::connected(int v1, int v2)
 {
     return op_find(v1) == op_find(v2);

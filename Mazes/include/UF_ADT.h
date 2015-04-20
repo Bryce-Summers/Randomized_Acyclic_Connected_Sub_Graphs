@@ -4,6 +4,7 @@
 #include "Graph.h"
 
 #include <mutex>
+#include <stdlib.h> // Needed for mallocing.
 
 
 /*
@@ -18,17 +19,27 @@
 class UF_ADT
 {
     public:
+
+        // Should only be called once!
         UF_ADT(int sizes);
 
         virtual ~UF_ADT() = 0;
 
-        virtual void op_union(EdgeList edgeList) = 0;
+        // This function should be overriden if a parallel implementation
+        // wishes to parallelize the insertion of edges.
+        virtual void op_union(EdgeList edgeList);
         virtual void op_union(int v1, int v2) = 0;
 
         // Guaranteed to be valid for sequential implementations.
         // For concurrent usage using comparison checks, please use connected instead.
         virtual int op_find(int vertex) = 0;
 
+
+        /* ENSURES:
+         * If the two vertices are connected at the beginning --> true.
+         * disconnected at beginning, but connected mid operation --> undefined. //FIXME : IDEAL : true.
+         * disconnected at beginning, disconnected at end --> false.
+         */
         virtual bool connected (int v1, int v2) = 0;
 
         // The Data.
