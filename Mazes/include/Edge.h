@@ -58,8 +58,14 @@ class Edge
             size_t hash_1 = std::hash<int>()(e.vertex_1);
             size_t hash_2 = std::hash<size_t>()(std::hash<int>()(e.vertex_2));
 
-            return std::hash<size_t>()(hash_1 ^ hash_2);
+            // h(h(v1) ^ h(h(v2)))
+            //return std::hash<size_t>()(hash_1 ^ hash_2);
+            
+            //Merkle–Damgard_construction like
+            // h(h(v1) ^ v2)
+            return std::hash<size_t>()(hash_1 ^ e.vertex_2);
         }
+
 
     protected:
     private:
