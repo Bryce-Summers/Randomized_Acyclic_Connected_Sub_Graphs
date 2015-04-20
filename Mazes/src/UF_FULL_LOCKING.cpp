@@ -18,9 +18,10 @@ bool UF_FULL_LOCKING::connected(int v1, int v2)
     return op_find(v1) == op_find(v2);
 }
 
-void UF_FULL_LOCKING::op_union(int v1, int v2)
+bool UF_FULL_LOCKING::op_union(int v1, int v2)
 {
     link(op_find(v1), op_find(v2));
+    return true;
 }
 
 /* // Recursive Version of find.

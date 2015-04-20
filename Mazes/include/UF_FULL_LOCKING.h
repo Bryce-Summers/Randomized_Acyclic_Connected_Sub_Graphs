@@ -17,7 +17,7 @@ class UF_FULL_LOCKING  : public UF_ADT
 
 
         void op_union(EdgeList edgeList);
-        void op_union(int v1, int v2);
+        bool op_union(int v1, int v2);
         int op_find(int vertex);
 
 

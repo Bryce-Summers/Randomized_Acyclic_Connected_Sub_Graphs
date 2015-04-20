@@ -16,7 +16,7 @@ class UF_CAS_FPC  : public UF_ADT
 
         // This is implemented naively in ADT at the moment. */
         //void op_union(EdgeList edgeList);
-        void op_union(int v1, int v2);
+        bool op_union(int v1, int v2);
         int op_find(int vertex);
 
         bool connected(int v1, int v2);

@@ -38,17 +38,19 @@
 		<Unit filename="include/EdgeList.h" />
 		<Unit filename="include/Maze_2dLattice.h" />
 		<Unit filename="include/Maze_ADT.h" />
-		<Unit filename="include/UF_Serial.h" />
-		<Unit filename="include/UF_ADT.h" />
 		<Unit filename="include/Tester.h" />
+		<Unit filename="include/UF_ADT.h" />
+		<Unit filename="include/UF_CAS_NPC.h" />
+		<Unit filename="include/UF_Serial.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Edge.cpp" />
 		<Unit filename="src/EdgeList.cpp" />
 		<Unit filename="src/Maze_2dLattice.cpp" />
 		<Unit filename="src/Maze_ADT.cpp" />
-		<Unit filename="src/UF_Serial.cpp" />
+		<Unit filename="src/Tester.cpp" />
 		<Unit filename="src/UF_ADT.cpp" />
-		<Unit filename="src/Tester.cpp"/>
+		<Unit filename="src/UF_CAS_NPC.cpp" />
+		<Unit filename="src/UF_Serial.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

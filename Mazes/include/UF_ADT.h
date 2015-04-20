@@ -27,8 +27,9 @@ class UF_ADT
 
         // This function should be overriden if a parallel implementation
         // wishes to parallelize the insertion of edges.
+        // FIXME : Should we return bools for edgeList unions as well.
         virtual void op_union(EdgeList edgeList);
-        virtual void op_union(int v1, int v2) = 0;
+        virtual bool op_union(int v1, int v2) = 0;
 
         // Guaranteed to be valid for sequential implementations.
         // For concurrent usage using comparison checks, please use connected instead.

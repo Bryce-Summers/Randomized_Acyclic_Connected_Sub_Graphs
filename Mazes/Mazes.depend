@@ -19,7 +19,9 @@
 	"Edge.h"
 	"EdgeList.h"
 
-1429485858 c:\users\bryce\desktop\git code\randomized_acyclic_connected_sub_graphs\mazes\include\edge.h
+1429505935 c:\users\bryce\desktop\git code\randomized_acyclic_connected_sub_graphs\mazes\include\edge.h
+	<stdlib.h>
+	<functional>
 
 1429246454 c:\users\bryce\desktop\git code\randomized_acyclic_connected_sub_graphs\mazes\include\edgelist.h
 	<vector>
@@ -32,12 +34,12 @@
 	"UF_ADT.h"
 	"UF_Serial.h"
 
-1429494976 c:\users\bryce\desktop\git code\randomized_acyclic_connected_sub_graphs\mazes\include\uf_adt.h
+1429563954 c:\users\bryce\desktop\git code\randomized_acyclic_connected_sub_graphs\mazes\include\uf_adt.h
 	"Graph.h"
 	<mutex>
 	<stdlib.h>
 
-1429496754 c:\users\bryce\desktop\git code\randomized_acyclic_connected_sub_graphs\mazes\include\uf_serial.h
+1429563975 c:\users\bryce\desktop\git code\randomized_acyclic_connected_sub_graphs\mazes\include\uf_serial.h
 	"UF_ADT.h"
 
 1429483159 source:c:\users\bryce\desktop\git code\randomized_acyclic_connected_sub_graphs\mazes\src\edge.cpp
@@ -59,7 +61,7 @@
 1429495713 source:c:\users\bryce\desktop\git code\randomized_acyclic_connected_sub_graphs\mazes\src\uf_adt.cpp
 	"../include/UF_ADT.h"
 
-1429482116 c:\users\bryce\desktop\git code\randomized_acyclic_connected_sub_graphs\mazes\include\tester.h
+1429501947 c:\users\bryce\desktop\git code\randomized_acyclic_connected_sub_graphs\mazes\include\tester.h
 	"Maze_ADT.h"
 	"UF_ADT.h"
 	<unordered_set>

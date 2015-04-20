@@ -1,7 +1,26 @@
 #include "../include/UF_HAND_OVER_HAND_LOCKING.h"
 #include <stdlib.h>
 
+/*
+ * Concurrent Union Find Data structure.
+ *
+ * Written by Bryce Summers and Brandon Lum.
+ * 4/19/2015
+ *
+ * Features locks for ever node.
+ * Hand over Hand locking is used.
+ *
+ * Invariants : All nodes are greater than their parents.
+ *
+ * Implementation details :
+ * 1. All locks should be taken in descending order.
+ *    lock(1) before lock(2), to prevent dead lock with the finds.
+ * 2. locks may theoretically be released in any order.
+ */
+
+
 // BL: Locality of structure should be revisited
+// BS : We should box these pieces of data. (parents, locks) instead of parents*locks to enhance cache locality.
 
 // -- Constructor.
 UF_HAND_OVER_HAND_LOCKING::UF_HAND_OVER_HAND_LOCKING(int size) : UF_ADT(size)
@@ -19,12 +38,59 @@ UF_HAND_OVER_HAND_LOCKING::~UF_ADT()
 
 bool UF_HAND_OVER_HAND_LOCKING::connected(int v1, int v2)
 {
-    return op_find(v1) == op_find(v2);
+    int root1 = find_and_lock(v1);
+    int root2 = find_and_lock(v2, v1);
+
+    // BS: FIXME : again, ensure that the locks are taken in decreasing order.
+
+
+    if(root1 == root2)
+    {
+        unlock(root1);
+        return true;
+    }
+
+    unlock(root1);
+    unlock(root2);
+
+    return false;
 }
 
-void UF_HAND_OVER_HAND_LOCKING::op_union(int v1, int v2)
+// Returns true iff two separate partitions have now been joined.
+bool UF_HAND_OVER_HAND_LOCKING::op_union(int v1, int v2)
 {
-    link(op_find(v1), op_find(v2));
+    int root1 = op_find(v1);
+    int root2 = op_find(v2);
+
+    // Connected already.
+    if(root1 == root2)
+    {
+        return false;
+    }
+
+    // FIXME : Make sure the locks are taken in decreasing order!!
+    // Potential deadlock oppurtunity here if root1 < root2?
+
+
+    // Find and hold the locks for the current roots.
+    root1 = find_and_lock(root1);
+    // Prevent deadlock by stopping at root1 if found.
+    root2 = find_and_lock(root2, root1);
+
+    // Connected already.
+    if(root1 == root2)
+    {
+        unlock(root1);
+        return false;
+    }
+
+    link(root1, root2);
+
+    unlock(root1);
+    unlock(root2);
+
+    // Link went through.
+    return true;
 }
 
 // An entire path of locks is taken, because any other finders will have
@@ -76,49 +142,63 @@ int UF_HAND_OVER_HAND_LOCKING::op_find(int vertex_initial)
     return root;
 }
 
-// Union by Rank.
+// See .h file for specification.
+int UF_HAND_OVER_HAND_LOCKING::find_and_lock(int vert, int stop)
+{
+    if(vert == stop)
+    {
+        return stop;
+    }
+
+    lock(vert);
+
+    int parent = parents[vert];
+
+    while(parent != vert)
+    {
+        if(parent == stop)
+        {
+            unlock(vert);
+            return stop;
+        }
+
+        lock(parent);
+        unlock(vert);
+
+        vert = parent;
+        parent = parents[vert];
+    }
+
+    // ASSERT (parent == vert);
+
+    return vert; // or parent.
+}
+
+/* Union by parents less than children.
+ * REQUIRES : v1 and v2 are locked.
+ * REQUIRES : v1 != v2.
+ */
 void UF_HAND_OVER_HAND_LOCKING::link(int v1, int v2)
 {
+
     // Very important.
+    // Note : Should never happen, because this case is now handled in union.
     if(v1 == v2)
 	{
+	    throw runtime_error("Error : Concurrent link of equal roots.");
 		return;
 	}
 
-    // BL: There is a TOCTTOU bug here. Can't factor this without
-    // assumptions
+    // Link greater --> lesser.
+    if(v1 < v2)
+    {
+        parents[v2] = v1;
+    }
+    else
+    {
+        parents[v1] = v2;
+    }
 
-    lock(v1);
-    lock(v2);
-	int rank1 = ranks[v1];
-	int rank2 = ranks[v2];
-
-    // DANGER : Do not add any return statements to the below clauses.
-
-	// v1 Greater depth.
-	if(rank1 > rank2)
-	{
-		parents[v2] = v1;
-	}
-
-	// v2 Greater depth.
-	else if(rank2 > rank1)
-	{
-		parents[v1] = v2;
-	}
-
-	// Equal depth --> increase rank.
-	else
-	{
-	    parents[v2] = v1;
-        ranks[v1] = rank1 + 1;
-	}
-
-    // DANGER : Do not add any return statements to the above clauses.
-
-
-    unlock(v1);
-    unlock(v2);
 	return;
 }
 

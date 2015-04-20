@@ -13,7 +13,7 @@ class UF_CAS_CPC  : public UF_ADT
         virtual ~UF_CAS_CPC();
 
         void op_union(EdgeList edgeList);
-        void op_union(int v1, int v2);
+        bool op_union(int v1, int v2);
         int op_find(int vertex);
 
 

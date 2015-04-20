@@ -27,7 +27,7 @@ void UF_CAS_FPC::op_union(EdgeList edgeList)
 }
 */
 
-void UF_CAS_FPC::op_union(int v1, int v2)
+bool UF_CAS_FPC::op_union(int v1, int v2)
 {
 
 }
