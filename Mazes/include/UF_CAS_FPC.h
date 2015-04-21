@@ -1,6 +1,8 @@
 #ifndef UF_CAS_FPC_H
 #define UF_CAS_FPC_H
 
+#include "UF.h"
+
 /*
  * Union Find, Compare and Swap based lock free, Full Path compression.
  * Written by Bryce Summers on 4/19/2015.

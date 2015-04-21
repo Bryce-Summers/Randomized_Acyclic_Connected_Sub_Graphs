@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 // -- Constructor.
-UF_Serial::UF_Serial(int size) : UF_ADT(size)
+UF_Serial::UF_Serial(int size)
 {
     this->parents = (int*) malloc(sizeof(int)*size);
     this->ranks   = (int*) malloc(sizeof(int)*size);

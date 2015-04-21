@@ -1,6 +1,6 @@
 #ifndef UF_CAS_NPC_H
 #define UF_CAS_NPC_H
-
+#include "UF_ADT.h"
 
 class UF_CAS_NPC : public UF_ADT
 {
@@ -22,6 +22,7 @@ class UF_CAS_NPC : public UF_ADT
         int * parents;
         int * ranks;
         int size;
+        void link(int v1, int v2);
 };
 
 #endif // UF_CAS_NPC_H

@@ -1,4 +1,4 @@
-#include "UF_CAS_FPC.h"
+#include "../include/UF_CAS_FPC.h"
 
 /*
  * Lock Free Union Find Structure Implementation.
@@ -43,7 +43,7 @@ void UF_CAS_FPC::op_union(EdgeList edgeList)
 
 bool UF_CAS_FPC::op_union(int v1, int v2)
 {
-
+    return false;
 }
 
 /*
@@ -91,6 +91,6 @@ bool UF_CAS_FPC::connected(int v1, int v2)
 
     // FIXME Handle degeneracies.
 
-    return parent[root1] == parent[root2];
+    return parents[root1] == parents[root2];
 
 }

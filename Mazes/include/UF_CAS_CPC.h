@@ -1,6 +1,7 @@
 #ifndef UF_CAS_CPC_H
 #define UF_CAS_CPC_H
 
+#include "UF.h"
 
 /* Union Find, Compare and Swap based lock free, Constrained Path compression.
  *

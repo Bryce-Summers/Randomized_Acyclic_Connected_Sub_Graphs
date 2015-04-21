@@ -1,7 +1,7 @@
 #include "../include/UF_FULL_LOCKING.h"
 #include <stdlib.h>
 
-UF_FULL_LOCKING::UF_FULL_LOCKING() : UF_ADT()
+UF_FULL_LOCKING::UF_FULL_LOCKING(int size)
 {
     this->parents = (int*) malloc(sizeof(int)*size);
     this->ranks   = (int*) malloc(sizeof(int)*size);
@@ -126,10 +126,10 @@ void UF_FULL_LOCKING::link(int v1, int v2)
 // Global locking functions.
 void UF_FULL_LOCKING::lock_all()
 {
-    lock_all.lock();
+    lock_global.lock();
 }
 
 void UF_FULL_LOCKING::unlock_all()
 {
-    lock_all.unlock();
+    lock_global.unlock();
 }

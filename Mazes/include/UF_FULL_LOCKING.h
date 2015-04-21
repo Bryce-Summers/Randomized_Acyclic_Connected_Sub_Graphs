@@ -1,6 +1,8 @@
 #ifndef UF_FULL_LOCKING_H
 #define UF_FULL_LOCKING_H
 
+#include "UF.h"
+#include "Graph.h"
 /*
  * Full locking implementation of a Union Find Structure.
  *
@@ -35,7 +37,7 @@ class UF_FULL_LOCKING  : public UF_ADT
         void lock_all();
         void unlock_all();
 
-        std::mutex lock_all;
+        std::mutex lock_global;
 
             // The Data.
         int * parents;

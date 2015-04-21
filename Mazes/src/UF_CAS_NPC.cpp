@@ -1,5 +1,5 @@
-#include "UF_CAS_NPC.h"
-
+#include "../include/UF_CAS_NPC.h"
+#include <stdlib.h>
 /*
  * Lock Free Union Find structure with no path compression.
  *

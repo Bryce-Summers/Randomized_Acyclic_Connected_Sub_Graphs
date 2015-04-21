@@ -1,6 +1,7 @@
 #ifndef UF_HAND_OVER_HAND_LOCKING_H
 #define UF_HAND_OVER_HAND_LOCKING_H
 
+#include "UF.h"
 
 /*
  * Per Node locks implementation.
@@ -41,6 +42,8 @@ class UF_HAND_OVER_HAND_LOCKING  : public UF_ADT
         // If this function encounters node 'stop', then  it does not take the lock and returns stop.
         // NOTE : -1 should not ever the index of any node and is used to indicate no valid stop node.
         int find_and_lock(int vert, int stop = -1);
+
+        void link (int v1, int v2);
 };
 
 #endif // UF_HAND_OVER_HAND_LOCKING_H

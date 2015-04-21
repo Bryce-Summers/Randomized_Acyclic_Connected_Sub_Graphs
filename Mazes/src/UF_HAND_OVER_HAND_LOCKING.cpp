@@ -1,5 +1,8 @@
+using namespace std;
+
 #include "../include/UF_HAND_OVER_HAND_LOCKING.h"
 #include <stdlib.h>
+#include <mutex>
 
 /*
  * Concurrent Union Find Data structure.
@@ -22,8 +25,16 @@
 // BL: Locality of structure should be revisited
 // BS : We should box these pieces of data. (parents, locks) instead of parents*locks to enhance cache locality.
 
+
+// TODO: Integrate
+class node {
+    int parent;
+    int rank;
+    std::mutex lock;
+};
+
 // -- Constructor.
-UF_HAND_OVER_HAND_LOCKING::UF_HAND_OVER_HAND_LOCKING(int size) : UF_ADT(size)
+UF_HAND_OVER_HAND_LOCKING::UF_HAND_OVER_HAND_LOCKING(int size)
 {
 
     this->parents = (int*) malloc(sizeof(int)*size);
