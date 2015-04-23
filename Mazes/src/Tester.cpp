@@ -49,17 +49,11 @@ bool Tester::test(UF_ADT * (*func_create)(int))
     }
 
     test_then_union(UF, 0, 2);
-
     test_then_union(UF, 1, 2);
-
     test_then_union(UF, 2, 3);
-
     test_then_union(UF, 5, 4);
-
     test_then_union(UF, 0, 5);
-
     test_then_union(UF, 5, 2);
-
 
 	return true;
 }
@@ -72,7 +66,6 @@ bool Tester::test(UF_ADT * (*func_create)(int))
 bool Tester::test(Maze_ADT &maze, UF_ADT &UF)
 {
   /* FIXME : I have not been able to properly specify a hash function for Edges.*/
-
 
    EdgeList edges = maze.populateEdgeList();
 
@@ -130,7 +123,7 @@ void Tester::ASSERT(bool predicate)
 // contiguous nodes labeled [0, num_nodes) is connected and acyclic.
 bool Tester::connected_and_acyclic(EdgeList edgeList, int num_nodes)
 {
-    /*
+
     UF_Serial UF = UF_Serial(num_nodes);
 
     std::vector<int> v_list_1 = edgeList.vertex1;
@@ -144,24 +137,24 @@ bool Tester::connected_and_acyclic(EdgeList edgeList, int num_nodes)
         int v2 = v_list_2[i];
 
         // This edge would introduce a cycle.
-        if(UF->connected(v1, v2))
+        if(UF.connected(v1, v2))
         {
             return false;
         }
 
-        UF->op_union(v1[i], v2[i]);
+        UF.op_union(v1, v2);
     }
 
-    int root = UF->op_find(0);
+    int root = UF.op_find(0);
     for(int i = 1 ; i < num_nodes; i++)
     {
         // Not connected.
-        if(root != UF->op_find(i))
+        if(root != UF.op_find(i))
         {
             return false;
         }
-    }
-*/
+	}
+
     return true;
 
 
