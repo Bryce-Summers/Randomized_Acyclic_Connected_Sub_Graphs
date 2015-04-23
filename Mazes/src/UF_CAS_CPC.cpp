@@ -18,3 +18,20 @@ UF_CAS_CPC::~UF_CAS_CPC()
     free(parents);
     free(ranks);
 }
+
+
+bool UF_CAS_CPC:: op_union(int v1, int v2)
+{
+
+  // FIXME!!!
+  return false;
+}
+
+
+int UF_CAS_CPC::op_find(int vertex)
+{
+
+  return vertex;
+
+
+}
