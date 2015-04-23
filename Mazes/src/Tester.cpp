@@ -14,9 +14,27 @@ Tester::~Tester()
  * For instance, mazes must have possible edges such
  * that it is possible to connect all of the nodes.
  */
-bool Tester::test(Maze_ADT &maze)
+bool Tester::test(Maze_ADT * maze)
 {
-   return false;
+
+  int num_nodes = maze -> getNumberOfVertices();
+
+  EdgeList edges = maze -> populateEdgeList();
+
+  // len - 1 edges required at a minnimum to allow for a spanning tree to exist.
+  ASSERT(edges.getSize() >= num_nodes - 1);
+
+  /*
+	1. Make sure it is possible to construct a minnimum spanning tree.
+	2. Make sure the invariants in the conflict graph are valid.
+  */
+
+  // Create a new set to track the edges that may not be added to the maze.
+  std::unordered_set<Edge> forTesting;
+
+  ASSERT(connected(edges, num_nodes));
+
+  return false;
 }
 
 void Tester::test_then_union(UF_ADT * UF, int v1, int v2)
@@ -32,7 +50,8 @@ void Tester::test_then_union(UF_ADT * UF, int v1, int v2)
 
 /*
  * Unit tests a union find structure serially.
- * Makes sure the the structure implementation fulfills all of the invariants of the abstract data type.
+ * Makes sure the the structure implementation fulfills all of the invariants of
+ * the abstract data type.
  *
  * Takes a function that allows the function to create a Union find structure of a specific size.
  */
@@ -121,7 +140,9 @@ void Tester::ASSERT(bool predicate)
 
 // Returns true iff the list of edges defines a subgraph on a graph with
 // contiguous nodes labeled [0, num_nodes) is connected and acyclic.
-bool Tester::connected_and_acyclic(EdgeList edgeList, int num_nodes)
+// SERIAL.
+// does not check acyclicness if acyclic = false.
+bool Tester::connected_and_acyclic(EdgeList edgeList, int num_nodes, bool acyclic)
 {
 
     UF_Serial UF = UF_Serial(num_nodes);
@@ -137,7 +158,7 @@ bool Tester::connected_and_acyclic(EdgeList edgeList, int num_nodes)
         int v2 = v_list_2[i];
 
         // This edge would introduce a cycle.
-        if(UF.connected(v1, v2))
+        if(UF.connected(v1, v2) && acyclic)
         {
             return false;
         }
