@@ -16,7 +16,7 @@ Tester::~Tester()
  */
 bool Tester::test(Maze_ADT &maze)
 {
-
+   return false;
 }
 
 void Tester::test_then_union(UF_ADT * UF, int v1, int v2)
@@ -111,6 +111,8 @@ bool Tester::test(Maze_ADT &maze, UF_ADT &UF)
            }
        }
    }//*/
+
+    return false;
 }
 
 // Throws an error if it does not pass.
