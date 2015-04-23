@@ -71,7 +71,9 @@ bool Tester::test(UF_ADT * (*func_create)(int))
  */
 bool Tester::test(Maze_ADT &maze, UF_ADT &UF)
 {
-    /* FIXME : I have not been able to properly specify a hash function for Edges.
+  /* FIXME : I have not been able to properly specify a hash function for Edges.*/
+
+
    EdgeList edges = maze.populateEdgeList();
 
    // Randomize the set of edges.

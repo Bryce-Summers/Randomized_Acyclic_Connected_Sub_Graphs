@@ -18,17 +18,6 @@ void maze_serial()
     cout << TEST->test(maze, UF);
 }
 
-namespace std {
-  template<>
-  class hash<Edge> {
-  public:
-    size_t operator()(const Edge &c) const
-    {
-      return c.vertex_1 + 467119*c.vertex_2;
-    }
-  };
-}
-
 int main()
 {
 

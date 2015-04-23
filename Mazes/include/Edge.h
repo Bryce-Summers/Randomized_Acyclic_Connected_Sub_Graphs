@@ -53,8 +53,18 @@ class Edge
                 && vertex_2==other.vertex_2;
         }
 
-        size_t operator()(const Edge& e) const
-        {
+
+    protected:
+    private:
+};
+
+namespace std
+{
+		template <>
+		struct hash<Edge>
+		{
+		  size_t operator()(const Edge& e) const
+		  {
             size_t hash_1 = std::hash<int>()(e.vertex_1);
             //size_t hash_2 = std::hash<size_t>()(std::hash<int>()(e.vertex_2));
 
@@ -64,11 +74,9 @@ class Edge
             //Merkle–Damgard_construction like
             // h(h(v1) ^ v2)
             return std::hash<size_t>()(hash_1 ^ e.vertex_2);
-        }
+		  }
+		};
+}
 
-
-    protected:
-    private:
-};
 
 #endif // EDGE_H
