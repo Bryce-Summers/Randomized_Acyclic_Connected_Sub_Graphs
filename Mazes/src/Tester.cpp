@@ -19,10 +19,10 @@ bool Tester::test(Maze_ADT * maze)
 
   int num_nodes = maze -> getNumberOfVertices();
 
-  EdgeList edges = maze -> populateEdgeList();
+  EdgeList * edges = maze -> populateEdgeList();
 
   // len - 1 edges required at a minnimum to allow for a spanning tree to exist.
-  ASSERT(edges.getSize() >= num_nodes - 1);
+  ASSERT(edges -> getSize() >= num_nodes - 1);
 
   /*
 	1. Make sure it is possible to construct a minnimum spanning tree.
@@ -30,9 +30,12 @@ bool Tester::test(Maze_ADT * maze)
   */
 
   // Create a new set to track the edges that may not be added to the maze.
-  std::unordered_set<Edge> forTesting;
 
+  // Ensure the possibility of constructing a minnnimum spanning tree.
   ASSERT(connected(edges, num_nodes));
+
+
+  delete edges;
 
   return false;
 }
@@ -86,10 +89,10 @@ bool Tester::test(Maze_ADT &maze, UF_ADT &UF)
 {
   /* FIXME : I have not been able to properly specify a hash function for Edges.*/
 
-   EdgeList edges = maze.populateEdgeList();
+   EdgeList *edges = maze.populateEdgeList();
 
    // Randomize the set of edges.
-   edges.shuffle();
+   edges->shuffle();
 
    std::map<Edge, EdgeList> conflict_map;
 
@@ -97,11 +100,11 @@ bool Tester::test(Maze_ADT &maze, UF_ADT &UF)
    std::unordered_set<Edge> forbidden;
 
    // FIXME : Make sure this cpp code compiles and works.
-   int len = edges.getSize();
+   int len = edges->getSize();
    for(int index = 0; index < len; index++)
    {
 
-       Edge e = edges.edges[index];
+       Edge e = edges->edges[index];
 
        int v1 = e.vertex_1;
        int v2 = e.vertex_2;
@@ -142,14 +145,14 @@ void Tester::ASSERT(bool predicate)
 // contiguous nodes labeled [0, num_nodes) is connected and acyclic.
 // SERIAL.
 // does not check acyclicness if acyclic = false.
-bool Tester::connected_and_acyclic(EdgeList edgeList, int num_nodes, bool acyclic)
+bool Tester::connected_and_acyclic(EdgeList * edgeList, int num_nodes, bool acyclic)
 {
 
     UF_Serial UF = UF_Serial(num_nodes);
 
-    std::vector<int> v_list_1 = edgeList.vertex1;
-    std::vector<int> v_list_2 = edgeList.vertex2;
-    int len = edgeList.vertex1.size();
+    std::vector<int> v_list_1 = edgeList -> vertex1;
+    std::vector<int> v_list_2 = edgeList -> vertex2;
+    int len = edgeList->vertex1. size();
 
     // Make all of the edge connections, while checking for acyclicness.
     for(int i = 0; i < len; i++)
