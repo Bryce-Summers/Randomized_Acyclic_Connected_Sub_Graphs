@@ -20,6 +20,11 @@ UF_CAS_CPC::~UF_CAS_CPC()
 }
 
 
+bool UF_CAS_CPC::connected(int v1, int v2)
+{
+  return false;
+}
+
 bool UF_CAS_CPC:: op_union(int v1, int v2)
 {
 
