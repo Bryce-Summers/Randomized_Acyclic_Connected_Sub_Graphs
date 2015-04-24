@@ -8,7 +8,8 @@
  * The Maze interface, written by Bryce Summers on 4/12/2015.
  *
  *
- * We need to provide a standardized way of describing nodes, edges, and the 2D embedding conflicts between edges.
+ * We need to provide a standardized way of describing nodes, edges,
+ * and the 2D embedding conflicts between edges.
  */
 
 class Maze_ADT
@@ -23,7 +24,10 @@ class Maze_ADT
         virtual int getNumberOfVertices() = 0;
 
         // Returns the characteristic Edge List containing all possible edges.
-        virtual EdgeList populateEdgeList() = 0;
+		// This List makes no gurantees about the ordering or lack therof of the edges.
+		// FIXME : Should we not pass EdgeLists by value??
+		// the caller of this function will own the memory and be responsible for freeing it.
+        virtual EdgeList * populateEdgeList() = 0;
 
         /*
          * This method should return a list of the nodes representing

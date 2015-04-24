@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "Edge.h"
+#include <stdlib.h>     /* srand, rand */
 
 class EdgeList
 {
@@ -21,6 +22,7 @@ class EdgeList
         void addEdge(int v1, int v2);
 
         // Randomizes the order of the edge list.
+		// SERIAL.
         void shuffle();
 
         unsigned int getSize()
@@ -32,6 +34,9 @@ class EdgeList
         {
             return edges;
         }
+
+
+		void swap(int index1, int index2, std::vector<int>& vec);
 
     protected:
     private:

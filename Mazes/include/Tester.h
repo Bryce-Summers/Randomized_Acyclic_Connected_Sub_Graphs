@@ -5,6 +5,12 @@
 #include "UF_ADT.h"
 #include <unordered_set>
 #include <set>
+#include "UF_Serial.h"
+
+#include <stdexcept>
+
+#include "EdgeList.h"
+#include "Edge.h"
 
 class Tester
 {
@@ -15,7 +21,7 @@ class Tester
         // Unit tests a maze implementation.
         // For instance, mazes must have possible edges such
         // that it is possible to connect all of the nodes.
-        bool test(Maze_ADT &maze);
+        bool test(Maze_ADT *maze);
 
         /*
          * Unit tests a union find structure serially.
@@ -28,7 +34,12 @@ class Tester
         bool test(Maze_ADT &maze, UF_ADT &UF);
 
         // Returns true iff the list of edges is connected and acyclic.
-        bool connected_and_acyclic(EdgeList edgeList, int num_nodes);
+        bool connected_and_acyclic(EdgeList * edgeList, int num_nodes, bool acyclic = true);
+
+		bool connected(EdgeList * edgeList, int num_nodes)
+		{
+		  return connected_and_acyclic(edgeList, num_nodes, false);
+		}
 
     protected:
     private:

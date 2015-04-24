@@ -14,7 +14,7 @@ class Maze_2dLattice : public Maze_ADT
         virtual int getNumberOfVertices();
 
         // Returns the characteristic Edge List containing all possible edges.
-        virtual EdgeList populateEdgeList();
+        virtual EdgeList *populateEdgeList();
 
         /*
          * This method should return a list of the nodes representing
