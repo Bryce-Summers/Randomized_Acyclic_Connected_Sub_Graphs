@@ -18,9 +18,9 @@ int Maze_2dLattice::getNumberOfVertices()
 }
 
 // Returns the characteristic Edge List containing all possible edges.
-EdgeList Maze_2dLattice::populateEdgeList()
+EdgeList * Maze_2dLattice::populateEdgeList()
 {
-    return EdgeList();
+    return new EdgeList();
 }
 
 /*

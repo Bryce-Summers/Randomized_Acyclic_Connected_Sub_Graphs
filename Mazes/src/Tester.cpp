@@ -14,9 +14,30 @@ Tester::~Tester()
  * For instance, mazes must have possible edges such
  * that it is possible to connect all of the nodes.
  */
-bool Tester::test(Maze_ADT &maze)
+bool Tester::test(Maze_ADT * maze)
 {
-   return false;
+
+  int num_nodes = maze -> getNumberOfVertices();
+
+  EdgeList * edges = maze -> populateEdgeList();
+
+  // len - 1 edges required at a minnimum to allow for a spanning tree to exist.
+  ASSERT(edges -> getSize() >= num_nodes - 1);
+
+  /*
+	1. Make sure it is possible to construct a minnimum spanning tree.
+	2. Make sure the invariants in the conflict graph are valid.
+  */
+
+  // Create a new set to track the edges that may not be added to the maze.
+
+  // Ensure the possibility of constructing a minnnimum spanning tree.
+  ASSERT(connected(edges, num_nodes));
+
+
+  delete edges;
+
+  return false;
 }
 
 void Tester::test_then_union(UF_ADT * UF, int v1, int v2)
@@ -32,7 +53,8 @@ void Tester::test_then_union(UF_ADT * UF, int v1, int v2)
 
 /*
  * Unit tests a union find structure serially.
- * Makes sure the the structure implementation fulfills all of the invariants of the abstract data type.
+ * Makes sure the the structure implementation fulfills all of the invariants of
+ * the abstract data type.
  *
  * Takes a function that allows the function to create a Union find structure of a specific size.
  */
@@ -49,17 +71,11 @@ bool Tester::test(UF_ADT * (*func_create)(int))
     }
 
     test_then_union(UF, 0, 2);
-
     test_then_union(UF, 1, 2);
-
     test_then_union(UF, 2, 3);
-
     test_then_union(UF, 5, 4);
-
     test_then_union(UF, 0, 5);
-
     test_then_union(UF, 5, 2);
-
 
 	return true;
 }
@@ -71,11 +87,12 @@ bool Tester::test(UF_ADT * (*func_create)(int))
  */
 bool Tester::test(Maze_ADT &maze, UF_ADT &UF)
 {
-    /* FIXME : I have not been able to properly specify a hash function for Edges.
-   EdgeList edges = maze.populateEdgeList();
+  /* FIXME : I have not been able to properly specify a hash function for Edges.*/
+
+   EdgeList *edges = maze.populateEdgeList();
 
    // Randomize the set of edges.
-   edges.shuffle();
+   edges->shuffle();
 
    std::map<Edge, EdgeList> conflict_map;
 
@@ -83,11 +100,11 @@ bool Tester::test(Maze_ADT &maze, UF_ADT &UF)
    std::unordered_set<Edge> forbidden;
 
    // FIXME : Make sure this cpp code compiles and works.
-   int len = edges.getSize();
+   int len = edges->getSize();
    for(int index = 0; index < len; index++)
    {
 
-       Edge e = edges.edges[index];
+       Edge e = edges->edges[index];
 
        int v1 = e.vertex_1;
        int v2 = e.vertex_2;
@@ -126,14 +143,16 @@ void Tester::ASSERT(bool predicate)
 
 // Returns true iff the list of edges defines a subgraph on a graph with
 // contiguous nodes labeled [0, num_nodes) is connected and acyclic.
-bool Tester::connected_and_acyclic(EdgeList edgeList, int num_nodes)
+// SERIAL.
+// does not check acyclicness if acyclic = false.
+bool Tester::connected_and_acyclic(EdgeList * edgeList, int num_nodes, bool acyclic)
 {
-    /*
+
     UF_Serial UF = UF_Serial(num_nodes);
 
-    std::vector<int> v_list_1 = edgeList.vertex1;
-    std::vector<int> v_list_2 = edgeList.vertex2;
-    int len = edgeList.vertex1.size();
+    std::vector<int> v_list_1 = edgeList -> vertex1;
+    std::vector<int> v_list_2 = edgeList -> vertex2;
+    int len = edgeList->vertex1. size();
 
     // Make all of the edge connections, while checking for acyclicness.
     for(int i = 0; i < len; i++)
@@ -142,24 +161,24 @@ bool Tester::connected_and_acyclic(EdgeList edgeList, int num_nodes)
         int v2 = v_list_2[i];
 
         // This edge would introduce a cycle.
-        if(UF->connected(v1, v2))
+        if(UF.connected(v1, v2) && acyclic)
         {
             return false;
         }
 
-        UF->op_union(v1[i], v2[i]);
+        UF.op_union(v1, v2);
     }
 
-    int root = UF->op_find(0);
+    int root = UF.op_find(0);
     for(int i = 1 ; i < num_nodes; i++)
     {
         // Not connected.
-        if(root != UF->op_find(i))
+        if(root != UF.op_find(i))
         {
             return false;
         }
-    }
-*/
+	}
+
     return true;
 
 
