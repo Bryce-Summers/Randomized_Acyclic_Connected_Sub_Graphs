@@ -2,6 +2,10 @@
 #define UF_CAS_NPC_H
 #include "UF_ADT.h"
 
+typedef struct {
+    int parent;
+} uf_cas_npc_node_t;
+
 class UF_CAS_NPC : public UF_ADT
 {
     public:
@@ -19,10 +23,10 @@ class UF_CAS_NPC : public UF_ADT
     private:
 
         // The Data.
-        int * parents;
-        int * ranks;
+        uf_cas_npc_node_t *uf_arr;
+        //int * ranks;
         int size;
-        void link(int v1, int v2);
+        bool link(int v1, int v2);
 };
 
 #endif // UF_CAS_NPC_H
