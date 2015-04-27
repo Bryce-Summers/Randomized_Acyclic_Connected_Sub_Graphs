@@ -14,13 +14,38 @@ Maze_2dLattice::~Maze_2dLattice()
  */
 int Maze_2dLattice::getNumberOfVertices()
 {
-    return 100;
+  return size*size;
 }
 
 // Returns the characteristic Edge List containing all possible edges.
 EdgeList * Maze_2dLattice::populateEdgeList()
 {
-    return new EdgeList();
+
+  EdgeList * output = new EdgeList();
+
+
+  for(int x = 0; x < size; x++)
+  for(int y = 0; y < size; x++)
+  {
+    int v = getIndex(x, y);
+    int v_right = getIndex(x + 1, y);
+    int v_down  = getIndex(x, y + 1);
+
+    if(x < size - 1)
+    {
+      output -> addEdge(v, v_right);
+    }
+    if(y < size - 1)
+    {
+      output -> addEdge(v, v_down);
+    }
+
+  }
+
+  return output;
+
+    
+
 }
 
 /*
@@ -30,4 +55,9 @@ EdgeList * Maze_2dLattice::populateEdgeList()
 std::map<Edge, EdgeList> Maze_2dLattice::getConflicts()
 {
     return std::map<Edge,EdgeList>();
+}
+
+int Maze_2dLattice::getIndex(int x, int y)
+{
+    return y*size + x;
 }
