@@ -2,6 +2,7 @@
 #define MAZE_2DLATTICE_H
 
 #include "Maze_ADT.h"
+#include "EdgeList.h"
 
 class Maze_2dLattice : public Maze_ADT
 {
@@ -27,6 +28,10 @@ class Maze_2dLattice : public Maze_ADT
 
         // 10 by 10 maze.
         const static int size = 10;
+
+		// -- Helper functions.
+		int getIndex(int x, int y);
+
 };
 
 #endif // MAZE_2DLATTICE_H

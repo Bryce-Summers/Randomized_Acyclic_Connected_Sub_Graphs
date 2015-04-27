@@ -38,3 +38,9 @@ void EdgeList::swap(int index1, int index2, std::vector<int>& vec)
   vec[index1] = vec[index2];
   vec[index2] = temp;
 }
+
+void EdgeList::addEdge(int v1, int v2)
+{
+  vertex1.push_back(v1);
+  vertex2.push_back(v2);
+}
