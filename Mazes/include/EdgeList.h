@@ -19,7 +19,13 @@ class EdgeList
         std::vector<Edge> edges;
 
 
+
         void addEdge(int v1, int v2);
+
+		void addEdge(Edge e)
+		{
+		  addEdge(e.vertex_1, e.vertex_2);
+		}
 
         // Randomizes the order of the edge list.
 		// SERIAL.

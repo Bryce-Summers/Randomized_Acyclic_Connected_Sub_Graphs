@@ -31,10 +31,13 @@ EdgeList * Maze_2dLattice::populateEdgeList()
     int v_right = getIndex(x + 1, y);
     int v_down  = getIndex(x, y + 1);
 
+	// -- Horizontal Edges.
     if(x < size - 1)
     {
       output -> addEdge(v, v_right);
     }
+
+	// -- Vertical Edges.
     if(y < size - 1)
     {
       output -> addEdge(v, v_down);
@@ -44,17 +47,36 @@ EdgeList * Maze_2dLattice::populateEdgeList()
 
   return output;
 
-    
-
 }
 
 /*
- * This method should return a list of the nodes representing
+ * This method returns a pointer to a map from Edges to those Edges that intersect it.
  *
+ * There are not conflicting Edges in a 2D Lattice except edges with themselves.
  */
-std::map<Edge, EdgeList> Maze_2dLattice::getConflicts()
+std::map<Edge, EdgeList *> * Maze_2dLattice::getConflicts()
 {
-    return std::map<Edge,EdgeList>();
+
+	auto * output_map = new std::map<Edge, EdgeList *>();
+
+
+	// Go Through all of the Edges in this lattice and set their conflict lists to only contain themselves.
+
+    EdgeList * edges = populateEdgeList();
+    std::vector<Edge> edge_vector = edges->edges;
+
+	for(auto iter = edge_vector.begin(); iter != edge_vector.end(); ++iter)
+	{
+	  Edge edge = *iter;
+
+	  EdgeList * edgeList = new EdgeList();
+
+	  edgeList->addEdge(edge);
+	  (*output_map)[edge] = edgeList;
+	}
+
+
+    return output_map;
 }
 
 int Maze_2dLattice::getIndex(int x, int y)

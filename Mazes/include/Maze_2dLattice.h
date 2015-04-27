@@ -21,7 +21,7 @@ class Maze_2dLattice : public Maze_ADT
          * This method should return a list of the nodes representing
          *
          */
-        virtual std::map<Edge, EdgeList> getConflicts();
+        virtual std::map<Edge, EdgeList *> * getConflicts();
 
     protected:
     private:

@@ -29,7 +29,6 @@ void EdgeList::shuffle()
 	swap(index1, index2, vertex2);
   }
 
-
 }
 
 void EdgeList::swap(int index1, int index2, std::vector<int>& vec)
