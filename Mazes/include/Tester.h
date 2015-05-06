@@ -16,6 +16,8 @@ using namespace std;
 #include "EdgeList.h"
 #include "Edge.h"
 
+#include <thread>
+
 class Tester
 {
     public:
@@ -55,6 +57,9 @@ class Tester
         void ASSERT(bool predicate);
 
         void test_then_union(UF_ADT * UF, int v1, int v2, bool connected_already);
+
+		// The worker thread functon for parrallel computations. Welds vertice together with edge paste.
+		void welder(EdgeList * edges, UF_ADT * UF);
 
 };
 

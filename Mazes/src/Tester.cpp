@@ -167,12 +167,22 @@ bool Tester::test_parallel(Maze_ADT &maze, UF_ADT &UF)
   cout << "Please Implement Test_Parrallel.";
   ASSERT(false);
 
+
+  //std::thread worker(looper, &loop, microseconds);
+
   return false;
+}
+
+// A worker thread for a parrallel computation.
+void Tester::welder(EdgeList * edges, UF_ADT * UF)
+{
+
 }
 
 // Throws an error if it does not pass.
 void Tester::ASSERT(bool predicate)
 {
+
     if(!predicate)
     {
         throw std::runtime_error("ASSERTION FAILED!!");
