@@ -11,7 +11,6 @@ using namespace std;
 #include <unordered_set>
 #include <set>
 #include "UF_Serial.h"
-
 #include <stdexcept>
 
 #include "EdgeList.h"
@@ -37,6 +36,9 @@ class Tester
         // Returns true iff the given maze and union find structure can be used to generate randomized spanning trees.
         // FIXME : Move the main.cpp code here.
         bool test(Maze_ADT &maze, UF_ADT &UF);
+
+		// Tests the given maze and Union find structure in a parrallel manner.
+		bool test_parallel(Maze_ADT &maze, UF_ADT &UF);
 
         // Returns true iff the list of edges is connected and acyclic.
         bool connected_and_acyclic(EdgeList * edgeList, int num_nodes, bool acyclic = true);

@@ -11,6 +11,7 @@ UF_CAS_CPC::UF_CAS_CPC(int size)
         parents[i] = i;
         ranks[i]   = 0;
     }
+
 }
 
 UF_CAS_CPC::~UF_CAS_CPC()

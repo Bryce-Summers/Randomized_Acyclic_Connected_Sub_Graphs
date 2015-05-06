@@ -161,6 +161,15 @@ bool Tester::test(Maze_ADT &maze, UF_ADT &UF)
    return result;
 }
 
+
+bool Tester::test_parallel(Maze_ADT &maze, UF_ADT &UF)
+{
+  cout << "Please Implement Test_Parrallel.";
+  ASSERT(false);
+
+  return false;
+}
+
 // Throws an error if it does not pass.
 void Tester::ASSERT(bool predicate)
 {
