@@ -27,6 +27,8 @@ void EdgeList::shuffle()
 
 	swap(index1, index2, vertex1);
 	swap(index1, index2, vertex2);
+
+	swap(index1, index2, edges);
   }
 
 }
@@ -38,8 +40,18 @@ void EdgeList::swap(int index1, int index2, std::vector<int>& vec)
   vec[index2] = temp;
 }
 
+void EdgeList::swap(int index1, int index2, std::vector<Edge>& vec)
+{
+  Edge temp = vec[index1];
+  vec[index1] = vec[index2];
+  vec[index2] = temp;
+}
+
+
 void EdgeList::addEdge(int v1, int v2)
 {
   vertex1.push_back(v1);
   vertex2.push_back(v2);
+
+  edges.push_back(Edge(v1, v2));
 }

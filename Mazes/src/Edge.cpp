@@ -2,7 +2,8 @@
 
 Edge::Edge(int v1, int v2)
 {
-    //ctor
+  vertex_1 = v1;
+  vertex_2 = v2;
 }
 
 Edge::~Edge()

@@ -27,7 +27,7 @@ class Maze_2dLattice : public Maze_ADT
     private:
 
         // 10 by 10 maze.
-        const static int size = 10;
+        const static int size = 100;
 
 		// -- Helper functions.
 		int getIndex(int x, int y);

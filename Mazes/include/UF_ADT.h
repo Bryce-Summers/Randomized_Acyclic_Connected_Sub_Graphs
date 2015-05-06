@@ -42,6 +42,8 @@ class UF_ADT
          */
         virtual bool connected (int v1, int v2) = 0;
 
+		//virtual int getSize();
+
     protected:
     private:
 };

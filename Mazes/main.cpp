@@ -24,12 +24,18 @@ using namespace std;
 
 // DEBUG mode.
 #define DEBUG
+//#define VERBOSE
+
+void println(std::string message)
+{
+#if defined(VERBOSE)
+  cout << message << endl;
+#endif
+}
 
 void test_maze_implementations(Tester * TEST)
 {
-
-  cout << "Testing an implementation.";
-
+  println("--Testing 2d Lattice");
   Maze_ADT * maze = new Maze_2dLattice();
   TEST -> test(maze);
   delete maze;
@@ -41,14 +47,24 @@ void test_maze_implementations(Tester * TEST)
 
 }
 
+UF_ADT * create_UF_serial(int size)
+{
+  return new UF_Serial(size);
+}
+
 void test_UF_implementations(Tester * TEST)
 {
+  println("--Testing UF Serial");
+
+  TEST -> test(&create_UF_serial);
 
 }
 
 void test_implementations(Tester * TEST)
 {
+  println("Testing maze implementations");
   test_maze_implementations(TEST);
+  println("Testing UF implementations");
   test_UF_implementations(TEST);
 }
 
@@ -59,42 +75,40 @@ void maze_serial(Tester * TEST)
     //Maze_ADT maze = Maze_2dLattice();
     Maze_2dLattice maze = Maze_2dLattice();
     UF_Serial UF = UF_Serial(maze.getNumberOfVertices());
-
-    cout << TEST->test(maze, UF);
+    cout << "Correctness: " << TEST->test(maze, UF) << endl;
 }
 
 int main()
 {
 
-   cout<< "Program has started." << endl;
+   println("Program has started.");
 
 
    Tester * TEST = new Tester();
 
 #if defined(DEBUG)
 
-  cout<< "Testing the implementations" << endl;
-  test_implementations(TEST);
-  cout << "Implementations Passed Unit Tests." << endl;
+   println("Testing the implementations");
+   test_implementations(TEST);
+   println("Implementations Passed Unit Tests.");
 #endif
 
 
 
-	cout << "Starting the maze testing." << endl;
+    println("Starting the maze testing.");
 
     clock_t a = clock();
     maze_serial(TEST);
 	clock_t b = clock();
-	cout << "Maze Time = " << (b - a) << endl;
+	cout << "Maze Time = " << (b - a) << " clockticks" << endl;
 
-
-	cout << "Clean up." << endl;
+	println("Clean up.");
 
 	// Clean up memory.
 	delete TEST;
 
 
-	cout<< "Exiting. Have a nice day." << endl;
+    cout<< "Exiting. Have a nice day." << endl;
 
     return 0;
 }

@@ -1,6 +1,11 @@
 #ifndef TESTER_H
 #define TESTER_H
 
+
+#include <iostream>
+using namespace std;
+
+
 #include "Maze_ADT.h"
 #include "UF_ADT.h"
 #include <unordered_set>
@@ -47,7 +52,7 @@ class Tester
         // Throws an error if it does not pass.
         void ASSERT(bool predicate);
 
-        void test_then_union(UF_ADT * UF, int v1, int v2);
+        void test_then_union(UF_ADT * UF, int v1, int v2, bool connected_already);
 
 };
 

@@ -18,11 +18,24 @@ bool Tester::test(Maze_ADT * maze)
 {
 
   int num_nodes = maze -> getNumberOfVertices();
-
   EdgeList * edges = maze -> populateEdgeList();
 
   // len - 1 edges required at a minnimum to allow for a spanning tree to exist.
   ASSERT(edges -> getSize() >= num_nodes - 1);
+
+  // These are here mainly to make sure that the immplementation correctly sets
+  // the edges array and does not segfault.
+  ASSERT(edges -> getSize() > 0);
+  ASSERT(edges -> getEdge(0).vertex_1 != edges -> getEdge(0).vertex_2);
+
+
+  int size = edges -> getSize();
+
+  edges -> shuffle();
+
+  ASSERT(edges -> getSize() == size);
+
+  // FIXME : Put in a test for the shuffling method?
 
   /*
 	1. Make sure it is possible to construct a minnimum spanning tree.
@@ -34,17 +47,20 @@ bool Tester::test(Maze_ADT * maze)
   // Ensure the possibility of constructing a minnnimum spanning tree.
   ASSERT(connected(edges, num_nodes));
 
-
   delete edges;
 
   return false;
 }
 
-void Tester::test_then_union(UF_ADT * UF, int v1, int v2)
+/* @param connected_already, specifies whether it is expected that the two vertices
+ * are connected at the instance of this function call.
+ * Ensures, the two vertices will be union together and will be connected together.
+ */
+void Tester::test_then_union(UF_ADT * UF, int v1, int v2, bool connected_already)
 {
-    ASSERT(!UF->connected(v1, v2));
-    ASSERT(!UF->connected(v2, v1)); // Test symmetric.
-    ASSERT(UF->op_find(v1) != UF->op_find(v2));
+    ASSERT(UF->connected(v1, v2) == connected_already);
+    ASSERT(UF->connected(v2, v1) == connected_already); // Test symmetric.
+    ASSERT((UF->op_find(v1) != UF->op_find(v2)) != connected_already);
     UF -> op_union(v1, v2);
     ASSERT(UF->connected(v1, v2));
     ASSERT(UF->connected(v2, v1));
@@ -57,6 +73,8 @@ void Tester::test_then_union(UF_ADT * UF, int v1, int v2)
  * the abstract data type.
  *
  * Takes a function that allows the function to create a Union find structure of a specific size.
+ *
+ * This function deletes the UF after it is done using it.
  */
 bool Tester::test(UF_ADT * (*func_create)(int))
 {
@@ -70,12 +88,15 @@ bool Tester::test(UF_ADT * (*func_create)(int))
         ASSERT(!UF->connected(i, i + 1));
     }
 
-    test_then_union(UF, 0, 2);
-    test_then_union(UF, 1, 2);
-    test_then_union(UF, 2, 3);
-    test_then_union(UF, 5, 4);
-    test_then_union(UF, 0, 5);
-    test_then_union(UF, 5, 2);
+    test_then_union(UF, 0, 2, false);
+    test_then_union(UF, 1, 2, false);
+    test_then_union(UF, 2, 3, false);
+    test_then_union(UF, 5, 4, false);
+    test_then_union(UF, 0, 5, false);
+    test_then_union(UF, 5, 2, true);
+
+	// Free the memory after testing.
+	delete UF;
 
 	return true;
 }
@@ -87,9 +108,10 @@ bool Tester::test(UF_ADT * (*func_create)(int))
  */
 bool Tester::test(Maze_ADT &maze, UF_ADT &UF)
 {
-  /* FIXME : I have not been able to properly specify a hash function for Edges.*/
 
    EdgeList *edges = maze.populateEdgeList();
+
+   EdgeList *output = new EdgeList();
 
    // Randomize the set of edges.
    edges->shuffle();
@@ -99,7 +121,8 @@ bool Tester::test(Maze_ADT &maze, UF_ADT &UF)
    // Create a new set to track the edges that may not be added to the maze.
    std::unordered_set<Edge> forbidden;
 
-   // FIXME : Make sure this cpp code compiles and works.
+   // Try to add every edge to the maze.
+   // Populate the output set of edges.
    int len = edges->getSize();
    for(int index = 0; index < len; index++)
    {
@@ -109,11 +132,12 @@ bool Tester::test(Maze_ADT &maze, UF_ADT &UF)
        int v1 = e.vertex_1;
        int v2 = e.vertex_2;
 
-
-       if((forbidden.find(e) != forbidden.end()) && !UF.connected(v1, v2))
+       if((forbidden.find(e) == forbidden.end()) && !UF.connected(v1, v2))
        {
            // Connect sets spanned by the edge.
            UF.op_union(e.vertex_1, e.vertex_2);
+
+		   output -> addEdge(e.vertex_1, e.vertex_2);
 
            std::vector<Edge> conflicts = conflict_map[e].getEdges();
 
@@ -129,7 +153,12 @@ bool Tester::test(Maze_ADT &maze, UF_ADT &UF)
        }
    }//*/
 
-    return false;
+   bool result = connected_and_acyclic(output, maze.getNumberOfVertices(), true);
+
+   delete edges;
+   delete output;
+
+   return result;
 }
 
 // Throws an error if it does not pass.
@@ -152,7 +181,14 @@ bool Tester::connected_and_acyclic(EdgeList * edgeList, int num_nodes, bool acyc
 
     std::vector<int> v_list_1 = edgeList -> vertex1;
     std::vector<int> v_list_2 = edgeList -> vertex2;
-    int len = edgeList->vertex1. size();
+    int len = edgeList->vertex1.size();
+
+	if(len < num_nodes - 1)
+	{
+	  cout << "Not enough edges, num_nodes = " << num_nodes << ", len = " << len << endl;
+	  ASSERT(false);
+	  return false;
+	}
 
     // Make all of the edge connections, while checking for acyclicness.
     for(int i = 0; i < len; i++)
@@ -163,7 +199,9 @@ bool Tester::connected_and_acyclic(EdgeList * edgeList, int num_nodes, bool acyc
         // This edge would introduce a cycle.
         if(UF.connected(v1, v2) && acyclic)
         {
-            return false;
+		  cout << "ERROR: Not Acyclic\n";
+		  ASSERT(false);
+          return false;
         }
 
         UF.op_union(v1, v2);
@@ -172,10 +210,15 @@ bool Tester::connected_and_acyclic(EdgeList * edgeList, int num_nodes, bool acyc
     int root = UF.op_find(0);
     for(int i = 1 ; i < num_nodes; i++)
     {
+
         // Not connected.
         if(root != UF.op_find(i))
         {
-            return false;
+		  cout <<"ERROR: Not Connected " << UF.op_find(i) << endl;
+		  cout << "--Root " << root << endl;
+		  cout << "--iteration " << i << endl;
+		  ASSERT(false);
+          return false;
         }
 	}
 

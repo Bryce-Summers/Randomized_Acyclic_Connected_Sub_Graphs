@@ -25,7 +25,7 @@ EdgeList * Maze_2dLattice::populateEdgeList()
 
 
   for(int x = 0; x < size; x++)
-  for(int y = 0; y < size; x++)
+  for(int y = 0; y < size; y++)
   {
     int v = getIndex(x, y);
     int v_right = getIndex(x + 1, y);

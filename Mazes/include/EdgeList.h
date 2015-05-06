@@ -19,7 +19,6 @@ class EdgeList
         std::vector<Edge> edges;
 
 
-
         void addEdge(int v1, int v2);
 
 		void addEdge(Edge e)
@@ -41,8 +40,14 @@ class EdgeList
             return edges;
         }
 
+		Edge getEdge(int index)
+		{
+		  return edges[index];
+		}
+
 
 		void swap(int index1, int index2, std::vector<int>& vec);
+		void swap(int index1, int index2, std::vector<Edge>& vec);
 
     protected:
     private:

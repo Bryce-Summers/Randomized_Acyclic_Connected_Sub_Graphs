@@ -1,0 +1,13 @@
+
+5/5/2015 -- UF_Serial, Maze_2dLattice.
+
+Unit tests passed.
+Corectness tests passed.
+
+Maze size = 100 by 100.
+
+Maze Time = 1140000 clockticks
+Maze Time = 1210000 clockticks
+Maze Time = 1140000 clockticks
+Maze Time = 1150000 clockticks
+
