@@ -1,8 +1,8 @@
 #include "../include/Maze_2dLattice.h"
 
-Maze_2dLattice::Maze_2dLattice()
+Maze_2dLattice::Maze_2dLattice(int size)
 {
-    //ctor
+  this -> size = size;
 }
 
 Maze_2dLattice::~Maze_2dLattice()

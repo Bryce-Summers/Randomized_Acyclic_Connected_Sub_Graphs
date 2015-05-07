@@ -30,7 +30,13 @@ class UF_FULL_LOCKING  : public UF_ADT
     private:
 
         // Links two root elements.
-        void link(int v1, int v2);
+		// Does not lock.
+		// Returns true if the link went through.
+		// (roots were disconnected before and are not connecte.)
+        bool link(int v1, int v2);
+
+		// Finds without locking.
+		int find_no_lock(int vertex);
 
         // Global full data structure locks.
         // No concurrency.

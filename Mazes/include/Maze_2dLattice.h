@@ -7,7 +7,7 @@
 class Maze_2dLattice : public Maze_ADT
 {
     public:
-        Maze_2dLattice();
+        Maze_2dLattice(int size);
         virtual ~Maze_2dLattice();
 
         /* This should return the number "nodes" in the maze.
@@ -27,7 +27,7 @@ class Maze_2dLattice : public Maze_ADT
     private:
 
         // 10 by 10 maze.
-        const static int size = 100;
+        int size = 100;
 
 		// -- Helper functions.
 		int getIndex(int x, int y);

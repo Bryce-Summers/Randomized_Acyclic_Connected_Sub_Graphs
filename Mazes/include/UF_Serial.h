@@ -19,15 +19,15 @@ class UF_Serial : public UF_ADT
        // void op_union(EdgeList edgeList);
         bool op_union(int v1, int v2);
         int op_find(int vertex);
-
-
         bool connected(int v1, int v2);
 
     protected:
     private:
 
         // Links two root elements.
-        void link(int v1, int v2);
+		// REQUIRES : v1 and v2 should be root nodes.
+		// Returns true iff the two root nodes are not equal and have been linked together.
+        bool link(int v1, int v2);
 
     // The Data.
     int * parents;

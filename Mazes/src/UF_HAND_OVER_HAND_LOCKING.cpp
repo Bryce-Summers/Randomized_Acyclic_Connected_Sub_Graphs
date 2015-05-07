@@ -39,7 +39,9 @@ UF_HAND_OVER_HAND_LOCKING::UF_HAND_OVER_HAND_LOCKING(int size)
 
     this->parents = (int*) malloc(sizeof(int)*size);
     this->ranks   = (int*) malloc(sizeof(int)*size);
+    this->locks = (std::mutex *)malloc(sizeof(std::mutex) * size);
     this->size = size;
+
 
     for(int i = 0; i < size; i++)
     {
@@ -47,7 +49,10 @@ UF_HAND_OVER_HAND_LOCKING::UF_HAND_OVER_HAND_LOCKING(int size)
         ranks[i]   = 0;
     }
 
-    this->locks = (std::mutex *)malloc(sizeof(std::mutex) * size);
+
+
+
+
 }
 
 
@@ -68,7 +73,6 @@ bool UF_HAND_OVER_HAND_LOCKING::connected(int v1, int v2)
     int root2 = find_and_lock(v2, v1);
 
     // BS: FIXME : again, ensure that the locks are taken in decreasing order.
-
 
     if(root1 == root2)
     {
@@ -96,7 +100,6 @@ bool UF_HAND_OVER_HAND_LOCKING::op_union(int v1, int v2)
 
     // FIXME : Make sure the locks are taken in decreasing order!!
     // Potential deadlock oppurtunity here if root1 < root2?
-
 
     // Find and hold the locks for the current roots.
     root1 = find_and_lock(root1);
@@ -233,12 +236,12 @@ void UF_HAND_OVER_HAND_LOCKING::link(int v1, int v2)
 
 void UF_HAND_OVER_HAND_LOCKING::lock(int vert)
 {
-    locks[vert].lock();
+  locks[vert].lock();
 }
 
 void UF_HAND_OVER_HAND_LOCKING::unlock(int vert)
 {
-    locks[vert].unlock();
+  locks[vert].unlock();
 }
 
 

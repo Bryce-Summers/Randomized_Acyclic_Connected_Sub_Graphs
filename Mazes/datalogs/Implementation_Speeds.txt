@@ -11,3 +11,31 @@ Maze Time = 1210000 clockticks
 Maze Time = 1140000 clockticks
 Maze Time = 1150000 clockticks
 
+5/7/2015 -- UF_Serial, UF_Full_locking
+
+UF_Serial Time = 1280 kilo clockticks
+Parrallel 4-threads, Full Locking Time = 80 kilo clockticks
+
+UF_Serial Time = 1510 kilo clockticks
+Parrallel 4-threads, Full Locking Time = 80 kilo clockticks
+
+UF_Serial Time = 1320 kilo clockticks
+Parrallel 4-threads, Full Locking Time = 60 kilo clockticks
+
+
+I think this improvement implies that the majority of the work was being done in the iteration variables.
+
+I investigated the discrepancy and found that the serial implementation had a bunch of overhead in its handling of conflicts.
+
+UF_Serial Time = 20 kilo clockticks
+Parrallel 4-threads, Full Locking Time = 110 kilo clockticks
+
+Now it looks like the locking is a major overhead.
+
+
+Questions:
+
+Serial shuffling and combining parts of the computations: Think of AMdahl's law.
+
+What is the time for the correctness checks?
+

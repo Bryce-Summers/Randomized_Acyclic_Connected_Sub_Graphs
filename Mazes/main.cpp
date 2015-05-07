@@ -31,6 +31,12 @@ using namespace std;
 // VERBOSE mode.
 #define VERBOSE
 
+
+const bool CHECK_CORRECTNESS = true;
+
+// The problem size. Vertices = SIZE^2;
+const int SIZE = 100;
+
 void println(std::string message)
 {
 #if defined(VERBOSE)
@@ -41,7 +47,7 @@ void println(std::string message)
 void test_maze_implementations(Tester * TEST)
 {
   println("--Testing 2d Lattice");
-  Maze_ADT * maze = new Maze_2dLattice();
+  Maze_ADT * maze = new Maze_2dLattice(SIZE);
   TEST -> test(maze);
   delete maze;
 
@@ -112,8 +118,11 @@ void test_UF_implementations(Tester * TEST)
   println("--Testing UF Full global locking.");
   TEST -> test(&create_UF_FULL_LOCKING);
 
+  println("--Skipping Hand over Hand locking.");
+  /*
   println("--Testing UF Hand over hand locking.");
-  TEST -> test(&create_UF_HAND_OVER_HAND_LOCKING);
+  /TEST -> test(&create_UF_HAND_OVER_HAND_LOCKING);
+  */
 
 }
 
@@ -134,14 +143,15 @@ clock_t maze_serial(Tester * TEST)
     clock_t a = clock();
 
     //Maze_ADT maze = Maze_2dLattice();
-    Maze_2dLattice maze = Maze_2dLattice();
+    Maze_2dLattice maze = Maze_2dLattice(SIZE);
     UF_Serial UF = UF_Serial(maze.getNumberOfVertices());
-	bool correct = TEST->test(maze, UF);
+	bool correct = TEST->test(maze, UF, CHECK_CORRECTNESS);
 
 	clock_t b = clock();
 
-	cout << "Correctness: " << correct << endl;
-	cout << "UF_Serial Time = " << (b - a) << " clockticks" << endl;
+	if(CHECK_CORRECTNESS)
+	  cout << "Correctness: " << correct << endl;
+	cout << "UF_Serial Time = " << (b - a)/1000 << " kilo clockticks" << endl;
 
 	return b - a;
 }
@@ -152,13 +162,14 @@ clock_t maze_parrallel(Tester * TEST, UF_ADT * (*func_create)(int), int num_thre
 
     clock_t a = clock();
 
-    Maze_2dLattice maze = Maze_2dLattice();
-	UF_ADT * UF = func_create(10);
-	bool correct = TEST -> test_parallel(maze, *UF, num_threads);
+    Maze_2dLattice maze = Maze_2dLattice(SIZE);
+	UF_ADT * UF = func_create(maze.getNumberOfVertices());
+	bool correct = TEST -> test_parallel(maze, *UF, num_threads, CHECK_CORRECTNESS);
 
 	clock_t b = clock();
 
-	cout << "Correctness: " << correct << endl;
+	if(CHECK_CORRECTNESS)
+	  cout << "Correctness: " << correct << endl;
 
     return b - a;
 
@@ -182,8 +193,12 @@ int main()
 
 	clock_t time;
 	time = maze_serial(TEST);
-    time = maze_parrallel(TEST, &create_UF_HAND_OVER_HAND_LOCKING, 4);
-	cout << "Parrallel 4-threads, Hand over hand Time = " << time << " clockticks" << endl;
+    //time = maze_parrallel(TEST, &create_UF_HAND_OVER_HAND_LOCKING, 4);
+	//cout << "Parrallel 4-threads, Hand over hand Time = " << time << " clockticks" << endl;
+
+	time = maze_parrallel(TEST, &create_UF_FULL_LOCKING, 4);
+	cout << "Parrallel 4-threads, Full Locking Time = " << time/1000 << " kilo clockticks" << endl;
+
 
 	// Clean up memory.
 	println("Clean up.");

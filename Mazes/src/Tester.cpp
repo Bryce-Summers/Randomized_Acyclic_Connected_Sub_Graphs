@@ -108,7 +108,7 @@ bool Tester::test(UF_ADT * (*func_create)(int))
  * can be used to generate randomized spanning trees.
  * 4/19/2015 : Moved the Main maze generation code here.
  */
-bool Tester::test(Maze_ADT &maze, UF_ADT &UF)
+bool Tester::test(Maze_ADT &maze, UF_ADT &UF, bool test_correctness)
 {
 
    EdgeList *edges = maze.populateEdgeList();
@@ -134,6 +134,14 @@ bool Tester::test(Maze_ADT &maze, UF_ADT &UF)
        int v1 = e.vertex_1;
        int v2 = e.vertex_2;
 
+	   if(UF.op_union(v1, v2))
+	   {
+		 output -> addEdge(e.vertex_1, e.vertex_2);
+	   }
+
+	   // FIXME : Handle Conflicts.
+
+	   /*
        if((forbidden.find(e) == forbidden.end()) && !UF.connected(v1, v2))
        {
            // Connect sets spanned by the edge.
@@ -152,10 +160,17 @@ bool Tester::test(Maze_ADT &maze, UF_ADT &UF)
                Edge e2 = conflicts[i];
                forbidden.insert(e2);
            }
-       }
+		   }*/
    }//*/
 
-   bool result = connected_and_acyclic(output, maze.getNumberOfVertices(), true);
+   // -- Handle Correctness.
+
+   bool result = true;
+
+   if(test_correctness)
+   {
+	 result = connected_and_acyclic(output, maze.getNumberOfVertices(), true);
+   }
 
    delete edges;
    delete output;
@@ -167,8 +182,9 @@ void *test(char * arg){
     return (void*)0;
 }
 
+//#define UF_DEBUG
 
-bool Tester::test_parallel(Maze_ADT &maze, UF_ADT &UF, int num_partitions)
+bool Tester::test_parallel(Maze_ADT &maze, UF_ADT &UF, int num_partitions, bool test_correctness)
 {
 
    EdgeList *edges = maze.populateEdgeList();
@@ -176,19 +192,20 @@ bool Tester::test_parallel(Maze_ADT &maze, UF_ADT &UF, int num_partitions)
    // Randomize the set of edges.
    edges->shuffle();
 
-   EdgeList *output = new EdgeList();
-
    EdgeList ** partitions = edges -> split(num_partitions);
 
    std::thread * threads = (std::thread *)malloc(sizeof(std::thread)*num_partitions);
+
+   EdgeList** outputs = (EdgeList **)malloc(sizeof(EdgeList *)*num_partitions);
 
    // Spawn all of the threads.
    for(int i = 0; i < num_partitions; i++)
    {
 	 // Frees internal partitions.
 	 EdgeList * partition = partitions[i];
-     new (&threads[i]) std::thread(&Tester::welder, this, partition, &UF);
+	 outputs[i] = new EdgeList();
 
+     new (&threads[i]) std::thread(&Tester::welder, this, partition, &UF, outputs[i]);
    }
 
    // Join all of the threads.
@@ -197,27 +214,53 @@ bool Tester::test_parallel(Maze_ADT &maze, UF_ADT &UF, int num_partitions)
 	 threads[i].join();
    }
 
-   // TODO : Determine whether we have produced correct results or not.
+   // Merge all of the Added Edge lists.
+   EdgeList * output = outputs[0];
+   for(int i = 1; i < num_partitions; i++)
+   {
+	 output->append(outputs[i]);
+   }
+
+   // Print out the list of edges.
+   #if defined(UF_DEBUG)
+   for(int i = 0; i < output->size(); i++)
+   {
+	 cout << output -> edge_string(i);
+   }
+   #endif
+
+
+   // Handle correctness testing.
+   bool result = true;
+
+   // Determine whether we have produced the correct reuslt or not.
+   if(test_correctness)
+   {
+	 result = connected_and_acyclic(output, maze.getNumberOfVertices(), true);
+   }
+
+   // CLEAN-UP.
 
    delete edges;
-   delete output;
+
+   for(int i = 0; i < num_partitions; i++)
+   {
+	 delete outputs[i];
+   }
+
+   free(outputs);
 
    // Free malloced arrays.
    free(partitions);
    free(threads);
 
-
-   bool result = false;
    return result;
 
 }
 
 // A worker thread for a parrallel computation.
-void Tester::welder(EdgeList * edges, UF_ADT * UF)
+void Tester::welder(EdgeList * edges, UF_ADT * UF, EdgeList * output)
 {
-
-   EdgeList *output = new EdgeList();
-
    //   std::map<Edge, EdgeList> conflict_map;
 
    // Create a new set to track the edges that may not be added to the maze.
@@ -228,37 +271,24 @@ void Tester::welder(EdgeList * edges, UF_ADT * UF)
    int len = edges->getSize();
    for(int index = 0; index < len; index++)
    {
-
        Edge e = edges->edges[index];
 
        int v1 = e.vertex_1;
        int v2 = e.vertex_2;
 
-       if((forbidden.find(e) == forbidden.end()) && !UF->connected(v1, v2))
-       {
-           // Connect sets spanned by the edge.
-           UF->op_union(e.vertex_1, e.vertex_2);
+	   bool added = UF->op_union(v1, v2);
 
+	   if(added)
+	   {
 		   output -> addEdge(e.vertex_1, e.vertex_2);
+	   }
 
-		   /*
-           std::vector<Edge> conflicts = conflict_map[e].getEdges();
+	   // FIXME : Deal with conflict sets if necessary.
 
-           // FIXME : Do we need to add e as well, or will it be in its own conflict map.
-           forbidden.insert(e);
 
-           int len = conflicts.size();
-           for(int i = 0; i < len; i++)
-           {
-               Edge e2 = conflicts[i];
-               forbidden.insert(e2);
-           }
-		   */
-       }
    }//*/
 
    delete edges;
-   delete output;
 }
 
 // Throws an error if it does not pass.
@@ -300,6 +330,7 @@ bool Tester::connected_and_acyclic(EdgeList * edgeList, int num_nodes, bool acyc
         if(UF.connected(v1, v2) && acyclic)
         {
 		  cout << "ERROR: Not Acyclic\n";
+		  cout << v1 << ", " << v2 << " Introduces a cycle.";
 		  ASSERT(false);
           return false;
         }

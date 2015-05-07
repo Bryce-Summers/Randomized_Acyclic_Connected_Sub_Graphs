@@ -53,6 +53,13 @@ class EdgeList
 		// Caller is responsible for freeing the list and all component lists.
 		EdgeList ** split(int parts);
 
+		void append(EdgeList * other);
+
+		int size();
+
+		std::string edge_string(int index);
+
+
     protected:
     private:
 };

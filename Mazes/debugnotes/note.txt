@@ -1,0 +1,5 @@
+We were getting an error if an invalide argument for using the std::mutex.
+
+I determined that we were probably not mallocing the proper memory.
+
+I finnally found out that the maze_parrallel function was not passing the appropiate size into the constructor, I then probptly changed the constant 10 to maze.getNumVertices(). Life is good now.

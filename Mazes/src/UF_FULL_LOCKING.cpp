@@ -24,13 +24,21 @@ UF_FULL_LOCKING::~UF_FULL_LOCKING()
 
 bool UF_FULL_LOCKING::connected(int v1, int v2)
 {
-    return op_find(v1) == op_find(v2);
+  lock_all();
+  bool result = find_no_lock(v1) == find_no_lock(v2);
+  unlock_all();
+
+  return result;
+
 }
 
 bool UF_FULL_LOCKING::op_union(int v1, int v2)
 {
-    link(op_find(v1), op_find(v2));
-    return true;
+    lock_all();
+    bool result = link(find_no_lock(v1), find_no_lock(v2));
+	unlock_all();
+
+    return result;
 }
 
 /* // Recursive Version of find.
@@ -54,6 +62,14 @@ int UF_FULL_LOCKING::op_find(int vertex_initial)
 {
 
     lock_all();
+	int root = find_no_lock(vertex_initial);
+    unlock_all();
+    return root;
+}
+
+
+int UF_FULL_LOCKING::find_no_lock(int vertex_initial)
+{
 
     // 1st transversal, find the root.
 
@@ -82,21 +98,17 @@ int UF_FULL_LOCKING::op_find(int vertex_initial)
         parent = parents[vertex];
     }
 
-
-    unlock_all();
     return root;
 }
 
 // Union by Rank.
-void UF_FULL_LOCKING::link(int v1, int v2)
+bool UF_FULL_LOCKING::link(int v1, int v2)
 {
     // Very important.
     if(v1 == v2)
 	{
-		return;
+		return false;
 	}
-
-	lock_all();
 
 	int rank1 = ranks[v1];
 	int rank2 = ranks[v2];
@@ -120,7 +132,8 @@ void UF_FULL_LOCKING::link(int v1, int v2)
         ranks[v1] = rank1 + 1;
 	}
 
-	unlock_all();
+	return true;
+
 }
 
 // Global locking functions.

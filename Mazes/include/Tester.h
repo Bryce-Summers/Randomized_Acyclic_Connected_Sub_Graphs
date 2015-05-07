@@ -37,10 +37,10 @@ class Tester
 
         // Returns true iff the given maze and union find structure can be used to generate randomized spanning trees.
         // FIXME : Move the main.cpp code here.
-        bool test(Maze_ADT &maze, UF_ADT &UF);
+        bool test(Maze_ADT &maze, UF_ADT &UF, bool test_correctness);
 
 		// Tests the given maze and Union find structure in a parrallel manner.
-		bool test_parallel(Maze_ADT &maze, UF_ADT &UF, int num_partitions);
+		bool test_parallel(Maze_ADT &maze, UF_ADT &UF, int num_partitions, bool test_correctness);
 
         // Returns true iff the list of edges is connected and acyclic.
         bool connected_and_acyclic(EdgeList * edgeList, int num_nodes, bool acyclic = true);
@@ -58,8 +58,12 @@ class Tester
 
         void test_then_union(UF_ADT * UF, int v1, int v2, bool connected_already);
 
-		// The worker thread functon for parrallel computations. Welds vertice together with edge paste.
-		void welder(EdgeList * edges, UF_ADT *UF);
+		/* The worker thread functon for parrallel computations. Welds vertice together with
+		 * edge paste.
+		 * The Output is a list of all of the edges that this function has properly welded using
+		 * the UF structure.
+		 */
+		void welder(EdgeList * edges, UF_ADT *UF, EdgeList * output);
 
 };
 

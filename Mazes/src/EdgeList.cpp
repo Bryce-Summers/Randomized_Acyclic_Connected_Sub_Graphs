@@ -83,3 +83,29 @@ EdgeList ** EdgeList::split(int parts)
   return output;
 
 }
+
+
+void EdgeList::append(EdgeList * other)
+{
+  std::vector<int> * vertex1_other = &(other -> vertex1);
+  vertex1.insert(vertex1.end(), vertex1_other->begin(), vertex1_other->end());
+
+  std::vector<int> * vertex2_other = &(other -> vertex2);
+  vertex2.insert(vertex2.end(), vertex2_other->begin(), vertex2_other->end());
+
+  std::vector<Edge> * edges_other = &(other -> edges);
+  edges.insert(edges.end(), edges_other->begin(), edges_other->end());
+
+}
+
+
+std::string EdgeList::edge_string(int index)
+{
+  return "(" + std::to_string(vertex1[index]) + ", " +  std::to_string(vertex2[index]) + ")\n";
+}
+
+// Returns the number of edges in this edge list.
+int EdgeList::size()
+{
+  return vertex1.size();
+}

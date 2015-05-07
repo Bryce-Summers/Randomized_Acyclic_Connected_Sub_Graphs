@@ -28,8 +28,7 @@ bool UF_Serial::connected(int v1, int v2)
 
 bool UF_Serial::op_union(int v1, int v2)
 {
-    link(op_find(v1), op_find(v2));
-    return true;
+  return link(op_find(v1), op_find(v2));
 }
 
 /* // Recursive Version of find.
@@ -82,12 +81,12 @@ int UF_Serial::op_find(int vertex_initial)
 }
 
 // Union by Rank.
-void UF_Serial::link(int v1, int v2)
+bool UF_Serial::link(int v1, int v2)
 {
     // Very important.
     if(v1 == v2)
 	{
-		return;
+		return false;
 	}
 
 	int rank1 = ranks[v1];
@@ -97,14 +96,12 @@ void UF_Serial::link(int v1, int v2)
 	if(rank1 > rank2)
 	{
 		parents[v2] = v1;
-		return;
 	}
 
 	// v2 Greater depth.
 	else if(rank2 > rank1)
 	{
 		parents[v1] = v2;
-		return;
 	}
 
 	// Equal depth --> increase rank.
@@ -113,4 +110,6 @@ void UF_Serial::link(int v1, int v2)
 	    parents[v2] = v1;
         ranks[v1] = rank1 + 1;
 	}
+
+	return true;
 }
