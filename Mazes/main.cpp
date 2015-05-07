@@ -35,7 +35,7 @@ using namespace std;
 const bool CHECK_CORRECTNESS = true;
 
 // The problem size. Vertices = SIZE^2;
-const int SIZE = 100;
+const int SIZE = 400;
 
 void println(std::string message)
 {
@@ -198,6 +198,9 @@ int main()
 
 	time = maze_parrallel(TEST, &create_UF_FULL_LOCKING, 4);
 	cout << "Parrallel 4-threads, Full Locking Time = " << time/1000 << " kilo clockticks" << endl;
+
+	time = maze_parrallel(TEST, &create_UF_CAS_NPC, 4);
+	cout << "Parrallel 4-threads, CAS, No Path Compression = " << time/1000 << " kilo clockticks" << endl;
 
 
 	// Clean up memory.
