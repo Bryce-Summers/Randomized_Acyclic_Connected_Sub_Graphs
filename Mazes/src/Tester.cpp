@@ -1,4 +1,6 @@
 #include "../include/Tester.h"
+#include <thread>
+
 
 Tester::Tester()
 {
@@ -161,6 +163,11 @@ bool Tester::test(Maze_ADT &maze, UF_ADT &UF)
    return result;
 }
 
+void *test(char * arg){
+    return (void*)0;
+}
+
+
 bool Tester::test_parallel(Maze_ADT &maze, UF_ADT &UF, int num_partitions)
 {
 
@@ -173,14 +180,15 @@ bool Tester::test_parallel(Maze_ADT &maze, UF_ADT &UF, int num_partitions)
 
    EdgeList ** partitions = edges -> split(num_partitions);
 
-   std::thread * threads = (std::thread *)malloc(sizeof(std::thread*)*num_partitions);
+   std::thread * threads = (std::thread *)malloc(sizeof(std::thread)*num_partitions);
 
    // Spawn all of the threads.
    for(int i = 0; i < num_partitions; i++)
    {
 	 // Frees internal partitions.
 	 EdgeList * partition = partitions[i];
-	 threads[i] = std::thread(welder, partition, &UF);
+     new (&threads[i]) std::thread(&Tester::welder, this, partition, &UF);
+
    }
 
    // Join all of the threads.
