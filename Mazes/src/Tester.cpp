@@ -161,28 +161,101 @@ bool Tester::test(Maze_ADT &maze, UF_ADT &UF)
    return result;
 }
 
-
-bool Tester::test_parallel(Maze_ADT &maze, UF_ADT &UF)
+bool Tester::test_parallel(Maze_ADT &maze, UF_ADT &UF, int num_partitions)
 {
-  cout << "Please Implement Test_Parrallel.";
-  ASSERT(false);
+
+   EdgeList *edges = maze.populateEdgeList();
+
+   // Randomize the set of edges.
+   edges->shuffle();
+
+   EdgeList *output = new EdgeList();
+
+   EdgeList ** partitions = edges -> split(num_partitions);
+
+   std::thread * threads = (std::thread *)malloc(sizeof(std::thread*)*num_partitions);
+
+   // Spawn all of the threads.
+   for(int i = 0; i < num_partitions; i++)
+   {
+	 // Frees internal partitions.
+	 EdgeList * partition = partitions[i];
+	 threads[i] = std::thread(welder, partition, &UF);
+   }
+
+   // Join all of the threads.
+   for(int i = 0; i < num_partitions; i++)
+   {
+	 threads[i].join();
+   }
+
+   // TODO : Determine whether we have produced correct results or not.
+
+   delete edges;
+   delete output;
+
+   // Free malloced arrays.
+   free(partitions);
+   free(threads);
 
 
-  //std::thread worker(looper, &loop, microseconds);
+   bool result = false;
+   return result;
 
-  return false;
 }
 
 // A worker thread for a parrallel computation.
 void Tester::welder(EdgeList * edges, UF_ADT * UF)
 {
 
+   EdgeList *output = new EdgeList();
+
+   //   std::map<Edge, EdgeList> conflict_map;
+
+   // Create a new set to track the edges that may not be added to the maze.
+   std::unordered_set<Edge> forbidden;
+
+   // Try to add every edge to the maze.
+   // Populate the output set of edges.
+   int len = edges->getSize();
+   for(int index = 0; index < len; index++)
+   {
+
+       Edge e = edges->edges[index];
+
+       int v1 = e.vertex_1;
+       int v2 = e.vertex_2;
+
+       if((forbidden.find(e) == forbidden.end()) && !UF->connected(v1, v2))
+       {
+           // Connect sets spanned by the edge.
+           UF->op_union(e.vertex_1, e.vertex_2);
+
+		   output -> addEdge(e.vertex_1, e.vertex_2);
+
+		   /*
+           std::vector<Edge> conflicts = conflict_map[e].getEdges();
+
+           // FIXME : Do we need to add e as well, or will it be in its own conflict map.
+           forbidden.insert(e);
+
+           int len = conflicts.size();
+           for(int i = 0; i < len; i++)
+           {
+               Edge e2 = conflicts[i];
+               forbidden.insert(e2);
+           }
+		   */
+       }
+   }//*/
+
+   delete edges;
+   delete output;
 }
 
 // Throws an error if it does not pass.
 void Tester::ASSERT(bool predicate)
 {
-
     if(!predicate)
     {
         throw std::runtime_error("ASSERTION FAILED!!");

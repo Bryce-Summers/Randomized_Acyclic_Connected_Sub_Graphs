@@ -55,3 +55,31 @@ void EdgeList::addEdge(int v1, int v2)
 
   edges.push_back(Edge(v1, v2));
 }
+
+
+// Splits this edge list into the input number of equal parts.
+// Caller is responsible for freeing the list and all component lists.
+EdgeList ** EdgeList::split(int parts)
+{
+
+  EdgeList ** output = (EdgeList **)malloc(sizeof(EdgeList*) * parts);
+
+  int len = vertex1.size();
+
+  for(int p = 0; p < parts; p++)
+  {
+	int start = len*p/parts;
+	int end = len*(p+1)/parts;
+
+	EdgeList  * output_partition = new EdgeList();
+	output[p] = output_partition;
+
+	for(int i = start; i < end; i++)
+	{
+	  output_partition -> addEdge(vertex1[i], vertex2[i]);
+	}
+  }
+
+  return output;
+
+}

@@ -40,7 +40,7 @@ class Tester
         bool test(Maze_ADT &maze, UF_ADT &UF);
 
 		// Tests the given maze and Union find structure in a parrallel manner.
-		bool test_parallel(Maze_ADT &maze, UF_ADT &UF);
+		bool test_parallel(Maze_ADT &maze, UF_ADT &UF, int num_partitions);
 
         // Returns true iff the list of edges is connected and acyclic.
         bool connected_and_acyclic(EdgeList * edgeList, int num_nodes, bool acyclic = true);
@@ -59,7 +59,7 @@ class Tester
         void test_then_union(UF_ADT * UF, int v1, int v2, bool connected_already);
 
 		// The worker thread functon for parrallel computations. Welds vertice together with edge paste.
-		void welder(EdgeList * edges, UF_ADT * UF);
+		void welder(EdgeList * edges, UF_ADT *UF);
 
 };
 

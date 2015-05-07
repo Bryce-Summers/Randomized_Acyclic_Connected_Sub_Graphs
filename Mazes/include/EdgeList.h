@@ -49,6 +49,10 @@ class EdgeList
 		void swap(int index1, int index2, std::vector<int>& vec);
 		void swap(int index1, int index2, std::vector<Edge>& vec);
 
+		// Splits this edge list into the input number of equal parts.
+		// Caller is responsible for freeing the list and all component lists.
+		EdgeList ** split(int parts);
+
     protected:
     private:
 };

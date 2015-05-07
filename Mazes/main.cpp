@@ -147,17 +147,18 @@ clock_t maze_serial(Tester * TEST)
 }
 
 
-clock_t maze_parrallel(Tester * TEST, UF_ADT * (*func_create)(int))
+clock_t maze_parrallel(Tester * TEST, UF_ADT * (*func_create)(int), int num_threads)
 {
 
     clock_t a = clock();
 
-
     Maze_2dLattice maze = Maze_2dLattice();
 	UF_ADT * UF = func_create(10);
-    cout << "Correctness: " << TEST -> test_parallel(maze, *UF) << endl;
+	bool correct = TEST -> test_parallel(maze, *UF, num_threads);
 
 	clock_t b = clock();
+
+	cout << "Correctness: " << correct << endl;
 
     return b - a;
 
@@ -178,7 +179,11 @@ int main()
 
     println("Starting the maze testing.");
 
-    clock_t time = maze_serial(TEST);
+
+	clock_t time;
+	time = maze_serial(TEST);
+    time = maze_parrallel(TEST, &create_UF_HAND_OVER_HAND_LOCKING, 4);
+	cout << "Parrallel 4-threads, Hand over hand Time = " << time << " clockticks" << endl;
 
 	// Clean up memory.
 	println("Clean up.");
