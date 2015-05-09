@@ -66,3 +66,11 @@ Parrallel 4-threads, Full Locking Time = 1290 kilo clockticks
 Parrallel 4-threads, CAS, No Path Compression = 440 kilo clockticks
 Parrallel 4-threads, HAND over HAND, No Path Compression = 1200 kilo clockticks
 
+
+// Results are showing no benifit from parrallelism.
+// I think we might not be timing the parrallel.
+maze = Lattice, size = 1000
+UF_Serial Time = 1440 kilo clockticks
+Parrallel 4-threads, Full Locking Time = 6920 kilo clockticks
+Parrallel 4-threads, CAS, No Path Compression = 2900 kilo clockticks
+Parrallel 4-threads, HAND over HAND, No Path Compression = 7270 kilo clockticks

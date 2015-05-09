@@ -120,8 +120,8 @@ bool Tester::test(Maze_ADT &maze, UF_ADT &UF, bool test_correctness)
 
    std::map<Edge, EdgeList> conflict_map;
 
-   // Create a new set to track the edges that may not be added to the maze.
-   std::unordered_set<Edge> forbidden;
+
+   clock_t a = clock();
 
    // Try to add every edge to the maze.
    // Populate the output set of edges.
@@ -139,29 +139,11 @@ bool Tester::test(Maze_ADT &maze, UF_ADT &UF, bool test_correctness)
 		 output -> addEdge(e.vertex_1, e.vertex_2);
 	   }
 
-	   // FIXME : Handle Conflicts.
-
-	   /*
-       if((forbidden.find(e) == forbidden.end()) && !UF.connected(v1, v2))
-       {
-           // Connect sets spanned by the edge.
-           UF.op_union(e.vertex_1, e.vertex_2);
-
-		   output -> addEdge(e.vertex_1, e.vertex_2);
-
-           std::vector<Edge> conflicts = conflict_map[e].getEdges();
-
-           // FIXME : Do we need to add e as well, or will it be in its own conflict map.
-           forbidden.insert(e);
-
-           int len = conflicts.size();
-           for(int i = 0; i < len; i++)
-           {
-               Edge e2 = conflicts[i];
-               forbidden.insert(e2);
-           }
-		   }*/
    }//*/
+
+   clock_t b = clock();
+
+   cout << "--loop time = " << (b - a)/1000 <<  "Kilo Clocks." << endl;
 
    // -- Handle Correctness.
 
@@ -198,6 +180,8 @@ bool Tester::test_parallel(Maze_ADT &maze, UF_ADT &UF, int num_partitions, bool 
 
    EdgeList** outputs = (EdgeList **)malloc(sizeof(EdgeList *)*num_partitions);
 
+   clock_t a = clock();
+
    // Spawn all of the threads.
    for(int i = 0; i < num_partitions; i++)
    {
@@ -220,6 +204,9 @@ bool Tester::test_parallel(Maze_ADT &maze, UF_ADT &UF, int num_partitions, bool 
    {
 	 output->append(outputs[i]);
    }
+
+   clock_t b = clock();
+   cout << "--loop time = " << (b - a)/1000 << "Kilo clocks." << endl;
 
    // Print out the list of edges.
    #if defined(UF_DEBUG)
