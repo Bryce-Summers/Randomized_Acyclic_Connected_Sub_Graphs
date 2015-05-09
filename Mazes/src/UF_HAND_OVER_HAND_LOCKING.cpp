@@ -120,8 +120,11 @@ bool UF_HAND_OVER_HAND_LOCKING::op_union(int v1, int v2)
 
 // finds the current root node of this vertex.
 // Does not leave any locked nodes.
-int UF_HAND_OVER_HAND_LOCKING::op_find(int vertex)
+int UF_HAND_OVER_HAND_LOCKING::op_find(int vertex_initial)
 {
+
+  int vertex = vertex_initial;
+
   lock(vertex);
   while(true)
   {
@@ -135,6 +138,9 @@ int UF_HAND_OVER_HAND_LOCKING::op_find(int vertex)
 	if(parent == vertex)
 	{
 	  unlock(vertex);
+
+	  // Perform some path compression before returning.
+	  path_compress(vertex_initial, vertex);
 	  return vertex;
 	}
 
@@ -146,6 +152,37 @@ int UF_HAND_OVER_HAND_LOCKING::op_find(int vertex)
 
 	vertex = parent;
   }
+}
+
+// Path compresses the path from vertex to root.
+// Stops when it reaches the root or a point where the path leads to a node less than the root.
+void UF_HAND_OVER_HAND_LOCKING::path_compress(int vertex, int root)
+{
+  lock(vertex);
+  while(nodes[vertex].parent > root)
+  {
+	// Remember the parent.
+	int parent = nodes[vertex].parent;
+
+	// Compress the parent.
+	nodes[vertex].parent = root;
+
+	// Reached a rootnode.
+	if(parent == vertex)
+	{
+	  unlock(parent);
+	  return;
+	}
+
+	// Continue on our journey.
+	lock(parent);
+	unlock(vertex);
+	vertex = parent;
+  }
+
+  // The path has either ended at the 'root' or has been path compressed by another call.
+  unlock(vertex);
+  return;
 }
 
 /*

@@ -58,6 +58,10 @@ class UF_HAND_OVER_HAND_LOCKING  : public UF_ADT
 
 		// Returns true if the link went through.
         bool link (int v1, int v2);
+
+		// Compresses all nodes from vertex down to the givne root node.
+		// Stops when it reaches root or another node that is more compressed.
+		void path_compress(int vertex, int root);
 };
 
 #endif // UF_HAND_OVER_HAND_LOCKING_H

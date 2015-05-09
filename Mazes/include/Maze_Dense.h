@@ -1,14 +1,14 @@
-#ifndef MAZE_2DLATTICE_H
-#define MAZE_2DLATTICE_H
+#ifndef MAZE_DENSE_H
+#define MAZE_DENSE_H
 
 #include "Maze_ADT.h"
 #include "EdgeList.h"
 
-class Maze_2dLattice : public Maze_ADT
+class Maze_Dense : public Maze_ADT
 {
     public:
-        Maze_2dLattice(int size);
-        virtual ~Maze_2dLattice();
+        Maze_Dense(int size);
+        virtual ~Maze_Dense();
 
         /* This should return the number "nodes" in the maze.
          */
@@ -34,4 +34,4 @@ class Maze_2dLattice : public Maze_ADT
 
 };
 
-#endif // MAZE_2DLATTICE_H
+#endif // MAZE_DENSE_H

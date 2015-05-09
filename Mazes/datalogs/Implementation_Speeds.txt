@@ -50,11 +50,19 @@ Parrallel 4-threads, CAS, No Path Compression = 550 kilo clockticks
 Parrallel 4-threads, HAND over HAND, No Path Compression = 1560 kilo clockticks
 
 // I fused the arrays into nodes, but it did not really help much.
-
+// Packing the arrays, while theoretically increaseing cache efficiency had a Negligible effect.
 maze = 2D Lattice, size = 400
 UF_Serial Time = 330 kilo clockticks
 Parrallel 4-threads, Full Locking Time = 1430 kilo clockticks
 Parrallel 4-threads, CAS, No Path Compression = 560 kilo clockticks
 Parrallel 4-threads, HAND over HAND, No Path Compression = 1640 kilo clockticks
 
-// Negligible effect.
+
+// I implemented path compression in hand over hand and saver around 400 kilo clockticks.
+
+maze = 2D Lattice, size = 400
+UF_Serial Time = 330 kilo clockticks
+Parrallel 4-threads, Full Locking Time = 1290 kilo clockticks
+Parrallel 4-threads, CAS, No Path Compression = 440 kilo clockticks
+Parrallel 4-threads, HAND over HAND, No Path Compression = 1200 kilo clockticks
+
