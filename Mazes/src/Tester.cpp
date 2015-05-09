@@ -1,5 +1,6 @@
 #include "../include/Tester.h"
 #include <thread>
+#include "../include/CycleTimer.h"
 
 
 Tester::Tester()
@@ -121,7 +122,7 @@ bool Tester::test(Maze_ADT &maze, UF_ADT &UF, bool test_correctness)
    std::map<Edge, EdgeList> conflict_map;
 
 
-   clock_t a = clock();
+   double a = CycleTimer::currentSeconds();
 
    // Try to add every edge to the maze.
    // Populate the output set of edges.
@@ -141,9 +142,9 @@ bool Tester::test(Maze_ADT &maze, UF_ADT &UF, bool test_correctness)
 
    }//*/
 
-   clock_t b = clock();
+   double b = CycleTimer::currentSeconds();
 
-   cout << "--loop time = " << (b - a)/1000 <<  "Kilo Clocks." << endl;
+   cout << "--loop time = " << (b - a)*1000 <<  "Kilo Clocks." << endl;
 
    // -- Handle Correctness.
 
@@ -180,7 +181,7 @@ bool Tester::test_parallel(Maze_ADT &maze, UF_ADT &UF, int num_partitions, bool 
 
    EdgeList** outputs = (EdgeList **)malloc(sizeof(EdgeList *)*num_partitions);
 
-   clock_t a = clock();
+   double a = CycleTimer::currentSeconds();
 
    // Spawn all of the threads.
    for(int i = 0; i < num_partitions; i++)
@@ -205,8 +206,8 @@ bool Tester::test_parallel(Maze_ADT &maze, UF_ADT &UF, int num_partitions, bool 
 	 output->append(outputs[i]);
    }
 
-   clock_t b = clock();
-   cout << "--loop time = " << (b - a)/1000 << "Kilo clocks." << endl;
+   double b = CycleTimer::currentSeconds();
+   cout << "--loop time = " << (b - a)*1000 << "ms." << endl;
 
    // Print out the list of edges.
    #if defined(UF_DEBUG)
