@@ -10,6 +10,8 @@ using namespace std;
  * Written by Bryce Summers and Brandon Lum.
  * 4/19/2015
  *
+ * Major Overhaul by Bryce Summers on 5/9/2015.
+ *
  * Features locks for ever node.
  * Hand over Hand locking is used.
  *
@@ -17,41 +19,25 @@ using namespace std;
  *
  * Implementation details :
  * 1. All locks should be taken in descending order.
- *    lock(1) before lock(2), to prevent dead lock with the finds.
+ *    lock(2) before lock(1), to prevent dead lock with the finds.
  * 2. locks may theoretically be released in any order.
  */
 
-
-// BL: Locality of structure should be revisited
-// BS : We should box these pieces of data. (parents, locks) instead of parents*locks to enhance cache locality.
-
-
-// TODO: Integrate
-class node {
-    int parent;
-    int rank;
-    std::mutex lock;
-};
 
 // -- Constructor.
 UF_HAND_OVER_HAND_LOCKING::UF_HAND_OVER_HAND_LOCKING(int size)
 {
 
-    this->parents = (int*) malloc(sizeof(int)*size);
-    this->ranks   = (int*) malloc(sizeof(int)*size);
-    this->locks = (std::mutex *)malloc(sizeof(std::mutex) * size);
     this->size = size;
+
+    this->nodes = (uf_hand_over_hand_node_t *)malloc(sizeof(uf_hand_over_hand_node_t) * size);
 
 
     for(int i = 0; i < size; i++)
     {
-        parents[i] = i;
-        ranks[i]   = 0;
+        this->nodes[i].parent = i;
+		new (&nodes[i].lock)std::mutex();// Special cpp syntax.
     }
-
-
-
-
 
 }
 
@@ -59,176 +45,146 @@ UF_HAND_OVER_HAND_LOCKING::UF_HAND_OVER_HAND_LOCKING(int size)
 UF_HAND_OVER_HAND_LOCKING::~UF_HAND_OVER_HAND_LOCKING()
 {
 
-    free(parents);
-    free(ranks);
-
-    free(locks);
+  free(this->nodes);
 
     // CPP should automatically call the superclass destructor.
 }
 
+
+// true --> nodes are connected as of the ending of this call.
+// false -> nodes were disconnected at the time of beginning of the call.
 bool UF_HAND_OVER_HAND_LOCKING::connected(int v1, int v2)
 {
-    int root1 = find_and_lock(v1);
-    int root2 = find_and_lock(v2, v1);
 
-    // BS: FIXME : again, ensure that the locks are taken in decreasing order.
+    int root1 = v1;
+    int root2 = v2;
 
-    if(root1 == root2)
-    {
-        unlock(root1);
-        return true;
-    }
+	while(true)
+	{
 
-    unlock(root1);
-    unlock(root2);
+	  root1 = op_find(root1);
+	  root2 = op_find(root2);
 
-    return false;
+	  // If two nodes that are identical were found,
+	  // then these branches must be connected for all time.
+	  if(root1 == root2)
+	  {
+		return true;
+	  }
+
+	  int max = std::max(root1, root2);
+	  int min = std::min(root1, root2);
+
+	  lock(max);
+	  lock(min);
+
+	  // If both parents are root nodes, but are not equal, then return false.
+	  if(nodes[max].parent == max && nodes[min].parent == min)
+	  {
+		unlock(max);
+		unlock(min);
+		return false;
+	  }
+
+	  unlock(max);
+	  unlock(min);
+	  continue;
+	}
 }
 
-// Returns true iff two separate partitions have now been joined.
+// Returns true iff the two separate partitions have now been joined.
 bool UF_HAND_OVER_HAND_LOCKING::op_union(int v1, int v2)
 {
-    int root1 = op_find(v1);
-    int root2 = op_find(v2);
 
-    // Connected already.
-    if(root1 == root2)
-    {
-        return false;
-    }
+  int root1 = v1;
+  int root2 = v2;
 
-    // FIXME : Make sure the locks are taken in decreasing order!!
-    // Potential deadlock oppurtunity here if root1 < root2?
+  do
+  {
 
-    // Find and hold the locks for the current roots.
-    root1 = find_and_lock(root1);
-    // Prevent deadlock by stopping at root1 if found.
-    root2 = find_and_lock(root2, root1);
+	root1 = op_find(v1);
+	root2 = op_find(v2);
 
-    // Connected already.
-    if(root1 == root2)
-    {
-        unlock(root1);
-        return false;
-    }
-
-    link(root1, root2);
-
-    unlock(root1);
-    unlock(root2);
-
-    // Link went through.
-    return true;
-}
-
-// An entire path of locks is taken, because any other finders will have
-// to wait for the first one to do path compression anyways.
-int UF_HAND_OVER_HAND_LOCKING::op_find(int vertex_initial)
-{
-    // 1st transversal, find the root.
-
-    int vertex = vertex_initial;
-
-    lock(vertex);
-    int parent = parents[vertex];
-
-    while(parent != vertex)
-    {
-        // BL: We want to keep track of prev vertex
-        // and unlock it too
-        // want to do something like this:
-        // unlock(vertex)
-        // ...
-        vertex = parent;
-        lock(vertex);
-        parent = parents[vertex];
-    }
-
-    int root = vertex;
-
-    // Second transversal, path compression.
-
-    // BL: Unlock root
-    // unlock(root);
-    // do the updates, we don't need root locked,
-    // cause we know the node will not be deleted,
-    // and we are just getting a pointer to it
-    // so code should look identical to previous one
-    vertex = vertex_initial;
-    parent = parents[vertex];
-
-    while(parent != vertex)
-    {
-        parents[vertex] = root;
-        unlock(vertex);
-        vertex = parent;
-        parent = parents[vertex];
-    }
-
-    unlock(vertex);
-
-    return root;
-}
-
-// See .h file for specification.
-int UF_HAND_OVER_HAND_LOCKING::find_and_lock(int vert, int stop)
-{
-    if(vert == stop)
-    {
-        return stop;
-    }
-
-    lock(vert);
-
-    int parent = parents[vert];
-
-    while(parent != vert)
-    {
-        if(parent == stop)
-        {
-            unlock(vert);
-            return stop;
-        }
-
-        lock(parent);
-        unlock(vert);
-
-        vert = parent;
-        parent = parents[vert];
-    }
-
-    // ASSERT (parent == vert);
-
-    return vert; // or parent.
-}
-
-/* Union by parents less than children.
- * REQUIRES : v1 and v2 are locked.
- * REQUIRES : v1 != v2.
- */
-void UF_HAND_OVER_HAND_LOCKING::link(int v1, int v2)
-{
-
-    // Very important.
-    // Note : Should never happen, because this case is now handled in union.
-    if(v1 == v2)
+	// Already unioned.
+	if(root1 == root2)
 	{
-	    throw runtime_error("Error : Concurrent link of equal roots.");
-		return;
+	  return false;
 	}
 
-    // Link greater --> lesser.
-    if(v1 < v2)
-    {
-        parents[v2] = v1;
-    }
-    else
-    {
-        parents[v1] = v2;
-    }
+  }while(!link(root1, root2));
 
-	return;
+  // These nodes must have now been successfully linked.
+  return true;
+
+}
+
+// finds the current root node of this vertex.
+// Does not leave any locked nodes.
+int UF_HAND_OVER_HAND_LOCKING::op_find(int vertex)
+{
+  lock(vertex);
+  while(true)
+  {
+	int parent = nodes[vertex].parent;
+
+	if(parent > vertex)
+	{
+	  throw runtime_error("Error : Linking Invariant Compromised, Lesser Linked to Greater!!");
+	}
+
+	if(parent == vertex)
+	{
+	  unlock(vertex);
+	  return vertex;
+	}
+
+	// Parent < vertex.
+
+	// Hand over hand transition.
+	lock(parent);
+	unlock(vertex);
+
+	vertex = parent;
+  }
+}
+
+/*
+ * Union by parents less than children.
+ * Returns true if the link succeeded.
+ * Links can only work between two distinct root nodes.
+ */
+bool UF_HAND_OVER_HAND_LOCKING::link(int v1, int v2)
+{
+
+    // Same vertices, already linked.
+    if(v1 == v2)
+	{
+		return false;
+	}
+
+    int min = std::min(v1, v2);
+	int max = std::max(v1, v2);
+
+	lock(max);
+	lock(min);
+
+    // Link greater --> lesser greater is still a root node.
+	if(nodes[max].parent == max)
+	{
+	  nodes[max].parent = min;
+	  unlock(max);
+	  unlock(min);
+	  return true;
+	}
+
+
+	// -- Greater node is no londer a root node,
+	// so we can not yet perform a link.
+
+	unlock(max);
+	unlock(min);
+
+	return false;
 }
 
 
@@ -236,12 +192,12 @@ void UF_HAND_OVER_HAND_LOCKING::link(int v1, int v2)
 
 void UF_HAND_OVER_HAND_LOCKING::lock(int vert)
 {
-  locks[vert].lock();
+  nodes[vert].lock.lock();
 }
 
 void UF_HAND_OVER_HAND_LOCKING::unlock(int vert)
 {
-  locks[vert].unlock();
+  nodes[vert].lock.unlock();
 }
 
 

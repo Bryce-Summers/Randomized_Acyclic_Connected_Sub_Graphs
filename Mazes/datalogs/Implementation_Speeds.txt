@@ -39,3 +39,22 @@ Serial shuffling and combining parts of the computations: Think of AMdahl's law.
 
 What is the time for the correctness checks?
 
+5/9/2015:
+
+maze = 2D Lattice, size = 400
+
+// I Completely Rewrote Hand over Hand.
+UF_Serial Time = 320 kilo clockticks
+Parrallel 4-threads, Full Locking Time = 1220 kilo clockticks
+Parrallel 4-threads, CAS, No Path Compression = 550 kilo clockticks
+Parrallel 4-threads, HAND over HAND, No Path Compression = 1560 kilo clockticks
+
+// I fused the arrays into nodes, but it did not really help much.
+
+maze = 2D Lattice, size = 400
+UF_Serial Time = 330 kilo clockticks
+Parrallel 4-threads, Full Locking Time = 1430 kilo clockticks
+Parrallel 4-threads, CAS, No Path Compression = 560 kilo clockticks
+Parrallel 4-threads, HAND over HAND, No Path Compression = 1640 kilo clockticks
+
+// Negligible effect.

@@ -9,8 +9,17 @@
  *
  * Written By Bryce Summers on 4/19/2015.
  *
+ * All locks taken in descending order. lock(2) before lock(1).
+ *
+ * We cannot maintain locks on the root nodes, because that may cause deadlock.
  */
 
+typedef struct{
+
+        int parent;
+        std::mutex lock; // Every node has a mutex.
+
+} uf_hand_over_hand_node_t;
 
 class UF_HAND_OVER_HAND_LOCKING  : public UF_ADT
 {
@@ -18,32 +27,37 @@ class UF_HAND_OVER_HAND_LOCKING  : public UF_ADT
         UF_HAND_OVER_HAND_LOCKING(int size);
         virtual ~UF_HAND_OVER_HAND_LOCKING();
 
-        void op_union(EdgeList edgeList);
+		/* -- Public Interface Methods.
+		 *
+		 * None of these methods keep locks.
+		 */
+
+		/* Returns true iff the sets containing v1 and v2 were disconnected
+		 * and have now been connected.
+		 */
         bool op_union(int v1, int v2);
+
+		// finds the current root node of this vertex.
+		// Does not keep any locks.
         int op_find(int vertex);
 
-
+		// true --> nodes are connected as of the ending of this call.
+		// false -> nodes were disconnected at the time of beginning of the call.
         bool connected(int v1, int v2);
 
     protected:
     private:
 
         // The Data.
-        int * parents;
-        int * ranks;
+
         int size;
-        std::mutex * locks; // Mutexes for every element.
+		uf_hand_over_hand_node_t * nodes;
 
         void lock(int vert);
         void unlock(int vert);
 
-        // Finds the root node, locks it, then returns the value of the root node.
-        // The caller is responsible for calling unlock(RETURN_VALUE) after they are done using it.
-        // If this function encounters node 'stop', then  it does not take the lock and returns stop.
-        // NOTE : -1 should not ever the index of any node and is used to indicate no valid stop node.
-        int find_and_lock(int vert, int stop = -1);
-
-        void link (int v1, int v2);
+		// Returns true if the link went through.
+        bool link (int v1, int v2);
 };
 
 #endif // UF_HAND_OVER_HAND_LOCKING_H

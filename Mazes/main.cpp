@@ -118,11 +118,11 @@ void test_UF_implementations(Tester * TEST)
   println("--Testing UF Full global locking.");
   TEST -> test(&create_UF_FULL_LOCKING);
 
-  println("--Skipping Hand over Hand locking.");
-  /*
+  /*  println("--Skipping Hand over Hand locking.");
+  /*/
   println("--Testing UF Hand over hand locking.");
-  /TEST -> test(&create_UF_HAND_OVER_HAND_LOCKING);
-  */
+  TEST -> test(&create_UF_HAND_OVER_HAND_LOCKING);
+  //*/
 
 }
 
@@ -189,7 +189,7 @@ int main()
 #endif
 
     println("Starting the maze testing.");
-
+	cout << "maze = 2D Lattice, size = " << SIZE << endl;
 
 	clock_t time;
 	time = maze_serial(TEST);
@@ -201,6 +201,9 @@ int main()
 
 	time = maze_parrallel(TEST, &create_UF_CAS_NPC, 4);
 	cout << "Parrallel 4-threads, CAS, No Path Compression = " << time/1000 << " kilo clockticks" << endl;
+
+	time = maze_parrallel(TEST, &create_UF_HAND_OVER_HAND_LOCKING, 4);
+	cout << "Parrallel 4-threads, HAND over HAND, No Path Compression = " << time/1000 << " kilo clockticks" << endl;
 
 
 	// Clean up memory.

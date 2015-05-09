@@ -39,28 +39,28 @@ bool UF_CAS_NPC::connected(int v1, int v2)
     int root1, root2;
 
     // Initialize roots
-    root1 = v1; 
+    root1 = v1;
     root2 = v2;
 
     do {
         root1 = op_find(root1);
         root2 = op_find(root2);
 
-        // If roots are equal, then already unioned 
+        // If roots are equal, then already unioned
         if (root1 == root2) {
             return true;
         }
 
         // If not try link, and if fail to link, keep
         // trying...
-        
+
 
         // READ FENSE HERE!
-        // This is required so that we can ensure that when we do 
+        // This is required so that we can ensure that when we do
         // a read of the parent, it is not ordered before we found the
         // next root, thus creating a race
         // since it is totally possible that find(root1) will finish
-        // and we will check the parent of root1 before 
+        // and we will check the parent of root1 before
         // root2 is found and parent is checked. we want to check the
         // parent at a state where their roots are consistent
         _mm_lfence();
@@ -78,7 +78,7 @@ bool UF_CAS_NPC::op_union(int v1, int v2)
     int root1, root2;
 
     // Initialize roots
-    root1 = v1; 
+    root1 = v1;
     root2 = v2;
     tmp1 = op_find(root1);
     tmp2 = op_find(root2);
@@ -89,7 +89,7 @@ bool UF_CAS_NPC::op_union(int v1, int v2)
         root1 = std::min(tmp1,tmp2);
         root2 = std::max(tmp1,tmp2);
 
-        // If roots are equal, then already unioned 
+        // If roots are equal, then already unioned
         if (root1 == root2) {
             return false;
         }
@@ -126,10 +126,10 @@ bool UF_CAS_NPC::link(int v1, int v2)
 {
     // If already linked or incorrect ordering
     if (v2 <= v1) {
-        return false; 
+        return false;
     }
 
-    // Do precheck to see if we dont have to do 
+    // Do precheck to see if we dont have to do
     // costly CAS
     if (this->uf_arr[v2].parent != v2) {
         return false;
@@ -137,10 +137,10 @@ bool UF_CAS_NPC::link(int v1, int v2)
 
     // Synchronous operation doesn't require fence
     /***
-     * In most cases, these builtins are considered a full barrier. 
-     * That is, no memory operand will be moved across the operation, 
-     * either forward or backward. Further, instructions will be issued as 
-     * necessary to prevent the processor from speculating loads across the 
+     * In most cases, these builtins are considered a full barrier.
+     * That is, no memory operand will be moved across the operation,
+     * either forward or backward. Further, instructions will be issued as
+     * necessary to prevent the processor from speculating loads across the
      * operation and from queuing stores after the operation.
      ***/
     bool result = __sync_bool_compare_and_swap(&this->uf_arr[v2].parent, v2, v1);
