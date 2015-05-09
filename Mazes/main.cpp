@@ -30,8 +30,7 @@ using namespace std;
 // VERBOSE mode.
 #define VERBOSE
 
-
-const bool CHECK_CORRECTNESS = false;
+const bool CHECK_CORRECTNESS = true;
 
 // The problem size. Vertices = SIZE^2;
 const int SIZE = 1000;
