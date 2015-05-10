@@ -1,0 +1,9 @@
+Discuss that we have developed the algorithm and data structures ourselves.
+
+The motivation for randomization is to give the user choice. Show simple non randomized procedures for the graphs.
+
+Discuss traditional array based maze creation algorithms.
+
+notes on Amdahl's law. The user would need to parallelize the randomization and other functions.
+
+Hand over hand probably does not work well, because the paths to the critical nodes are convergent, not divergent.
