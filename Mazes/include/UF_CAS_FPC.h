@@ -10,6 +10,11 @@
  * This implementation is non blocking and is lock free.
  */
 
+typedef struct {
+    int parent;
+} uf_cas_fpc_node_t;
+
+
 class UF_CAS_FPC  : public UF_ADT
 {
     public:
@@ -27,9 +32,13 @@ class UF_CAS_FPC  : public UF_ADT
     private:
 
         // The Data.
-        int * parents;
-        int * ranks;
+        uf_cas_fpc_node_t *nodes;
         int size;
+
+		bool link(int vertex1, int vertex2);
+
+		void path_compression(int vertex, int root);
+
 };
 
 #endif // UF_CAS_FPC_H

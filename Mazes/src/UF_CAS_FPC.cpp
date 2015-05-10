@@ -1,96 +1,184 @@
 #include "../include/UF_CAS_FPC.h"
+#include <stdlib.h>
+#include <stdexcept>
+#include <algorithm>
+#include <atomic>
 
 /*
- * Lock Free Union Find Structure Implementation.
+ * Lock Free Union Find structure with FULL Path compression.
  *
- * Written by Bryce Summers on 4/19/2015.
+ * By Bryce Summers, 5/10/2015
  *
- * Guarantees : The results of an op_find will be valid as of the time the call is initiated.
- *              The returned representative node may be out of date by the time is is returned to the user.
- *
- * Calls to Union are guaranteed to always larger integers to smaller integers.
- *
- * Would using an alternative total ordering improve cache behavior?
+ * Modifed to include path compression from NPC.
+ * Invariants : the parent of every node is <= than n.
  */
 
-UF_CAS_FPC::UF_CAS_FPC(int size) : UF_ADT()
+UF_CAS_FPC::UF_CAS_FPC(int size)
 {
-    this->parents = (int*) malloc(sizeof(int)*size);
-    this->ranks   = (int*) malloc(sizeof(int)*size);
     this->size = size;
+    this->nodes = (uf_cas_fpc_node_t*) malloc (sizeof(uf_cas_npc_node_t) * size);
+    if (this->nodes == NULL)
+    {
+        throw std::runtime_error("Malloc failed in initializing UF");
+    }
 
     for(int i = 0; i < size; i++)
     {
-        parents[i] = i;
-        ranks[i]   = 0;
+        this->nodes[i].parent = i;
     }
 }
 
 UF_CAS_FPC::~UF_CAS_FPC()
 {
-    free(parents);
-    free(ranks);
-}
-
-
-// FIXME : Implement this function iff we want to parrellelize it.
-/*
-void UF_CAS_FPC::op_union(EdgeList edgeList)
-{
-
-}
-*/
-
-bool UF_CAS_FPC::op_union(int v1, int v2)
-{
-    return false;
-}
-
-/*
- * Finds are mostly read operations with path compression.
- * We will need to consider the implications of write traffic.
- * We might want to perform tests to make sure a pointer needs to be changed before doing naive writes.
- */
-int UF_CAS_FPC::op_find(int vertex_initial)
-{
-    // 1st transversal, find the root.
-
-    int vertex = vertex_initial;
-
-    int parent = parents[vertex];
-
-    while(parent != vertex)
-    {
-        vertex = parent;
-        parent = parents[vertex];
-    }
-
-    int root = vertex;
-
-
-    // Second transversal, path compression.
-
-    vertex = vertex_initial;
-    parent = parents[vertex];
-
-    while(parent != vertex)
-    {
-        parents[vertex] = root;
-        vertex = parent;
-        parent = parents[vertex];
-    }
-
-    return root;
+    free (this->nodes);
 }
 
 
 bool UF_CAS_FPC::connected(int v1, int v2)
 {
-    int root1 = op_find(v1);
-    int root2 = op_find(v2);
+    int tmp1, tmp2;
+    int root1, root2;
 
-    // FIXME Handle degeneracies.
+    // Initialize roots
+    root1 = v1;
+    root2 = v2;
 
-    return parents[root1] == parents[root2];
+    do {
+        root1 = op_find(root1);
+        root2 = op_find(root2);
 
+        // If roots are equal, then already unioned
+        if (root1 == root2) {
+            return true;
+        }
+
+        // If not try link, and if fail to link, keep
+        // trying...
+
+
+        // READ FENSE HERE!
+        // This is required so that we can ensure that when we do
+        // a read of the parent, it is not ordered before we found the
+        // next root, thus creating a race
+        // since it is totally possible that find(root1) will finish
+        // and we will check the parent of root1 before
+        // root2 is found and parent is checked. we want to check the
+        // parent at a state where their roots are consistent
+        _mm_lfence();
+    } while (root1 != this->nodes[root1].parent
+          || root2 != this->nodes[root2].parent);
+
+
+
+    return false;
+}
+
+bool UF_CAS_FPC::op_union(int v1, int v2)
+{
+    int tmp1, tmp2;
+    int root1, root2;
+
+    // Initialize roots
+    root1 = v1;
+    root2 = v2;
+    tmp1 = op_find(root1);
+    tmp2 = op_find(root2);
+
+    do  {
+        tmp1 = op_find(root1);
+        tmp2 = op_find(root2);
+        root1 = std::min(tmp1,tmp2);
+        root2 = std::max(tmp1,tmp2);
+
+        // If roots are equal, then already unioned
+        if (root1 == root2) {
+            return false;
+        }
+
+        // If not try link, and if fail to link, keep
+        // trying...
+    } while (!link(op_find(root1), op_find(root2)));
+
+    // If left loop, successfully linked!
+    return true;
+}
+
+
+int UF_CAS_FPC::op_find(int vertex_initial)
+{
+    // 1st transversal, find the root.
+
+    int vertex = vertex_initial;
+    int parent = this->nodes[vertex].parent ;
+
+    while(parent != vertex)
+    {
+        vertex = parent;
+        parent = this->nodes[vertex].parent;
+    }
+
+    int root = vertex;
+
+	path_compression(vertex_initial, root);
+
+    return root;
+}
+
+void UF_CAS_FPC::path_compression(int vertex, int root)
+{
+
+  while(nodes[vertex].parent > root)
+  {
+	// Remember the parent.
+	int parent = nodes[vertex].parent;
+
+	// Our compression journey is no longer useful, because we have descended below the root.
+	if(parent >= root)
+	{
+	  return;
+	}
+
+	// Compress the parent.
+	//nodes[vertex].parent = root;
+    bool result = __sync_bool_compare_and_swap(&this->nodes[vertex].parent, parent, root);
+
+	// Forward progress on our journey down the path.
+	if(result)
+	{
+	  vertex = parent;
+	}
+  }
+
+  return;
+}
+
+// Link greater to lesser.
+//@assert v2 > v1
+bool UF_CAS_FPC::link(int v1, int v2)
+{
+    // If already linked or incorrect ordering
+    if (v2 <= v1) {
+        return false;
+    }
+
+    // Do precheck to see if we dont have to do
+    // costly CAS
+    if (this->nodes[v2].parent != v2) {
+        return false;
+    }
+
+    // Synchronous operation doesn't require fence
+    /***
+     * In most cases, these builtins are considered a full barrier.
+     * That is, no memory operand will be moved across the operation,
+     * either forward or backward. Further, instructions will be issued as
+     * necessary to prevent the processor from speculating loads across the
+     * operation and from queuing stores after the operation.
+     ***/
+    bool result = __sync_bool_compare_and_swap(&this->nodes[v2].parent, v2, v1);
+    if (result == true)
+    {
+        _mm_sfence();
+    }
+    return result;
 }

@@ -1,7 +1,4 @@
 #include "../include/Tester.h"
-#include <thread>
-#include "../include/CycleTimer.h"
-
 
 Tester::Tester()
 {
@@ -144,7 +141,7 @@ bool Tester::test(Maze_ADT &maze, UF_ADT &UF, bool test_correctness)
 
    double b = CycleTimer::currentSeconds();
 
-   cout << "--loop time = " << (b - a)*1000 <<  "Kilo Clocks." << endl;
+   cout << "--loop time = " << (b - a)*1000 <<  " milli seconds." << endl;
 
    // -- Handle Correctness.
 

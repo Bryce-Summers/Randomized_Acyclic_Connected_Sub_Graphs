@@ -5,7 +5,7 @@
 #include "include/UF.h"
 #include "include/Tester.h"
 
-
+#include "include/CycleTimer.h"
 
 // Used for timing.
 #include <ctime>
@@ -33,9 +33,9 @@ using namespace std;
 const bool CHECK_CORRECTNESS = true;
 
 // The problem size. Vertices = SIZE^2;
-const int SIZE = 1000;
+int SIZE = 2000;
 
-int THREAD_NUM = 4;
+int THREAD_NUM = 8;
 
 void println(std::string message)
 {
@@ -59,9 +59,7 @@ void test_maze_implementations(Tester * TEST)
 
   /** Test other mazes when they are created.
   maze = Maze
-
   */
-
 }
 
 // UF creation Functions.
@@ -109,16 +107,12 @@ void test_UF_implementations(Tester * TEST)
 
   println("--Skipping UF CAS Constrained Path compression, because it is not yet implemented.");
   //println("--Testing UF CAS Constrained Path compression.");
-  //  TEST -> test(&create_UF_CAS_CPC);
+  // TEST -> test(&create_UF_CAS_CPC);
 
-  println("--Skipping UF CAS Full Path compression, because it is not yet implemented.");
-  /*
+  //println("--Skipping UF CAS Full Path compression, because it is not yet implemented.");
+
   println("--Testing UF CAS Full Path Compression.");
   TEST -> test(&create_UF_CAS_FPC);
-  */
-
-  println("--Testing UF CAS No Path Compression.");
-  TEST -> test(&create_UF_CAS_NPC);
 
   println("--Testing UF Full global locking.");
   TEST -> test(&create_UF_FULL_LOCKING);
@@ -128,6 +122,13 @@ void test_UF_implementations(Tester * TEST)
   println("--Testing UF Hand over hand locking.");
   TEST -> test(&create_UF_HAND_OVER_HAND_LOCKING);
   //*/
+
+  println("--Testing UF CAS No Path Compression.");
+  TEST -> test(&create_UF_CAS_NPC);
+
+  println("--Testing UF CAS Full Path Compression.");
+  TEST -> test(&create_UF_CAS_FPC);
+
 
 }
 
@@ -142,16 +143,17 @@ void test_implementations(Tester * TEST)
 
 // runs the computations using UF_Serial in a serial fashion.
 // Returns the total time in clock ticks.
-clock_t maze_serial(Tester * TEST, Maze_ADT &maze)
+double maze_serial(Tester * TEST, Maze_ADT &maze)
 {
 
-    clock_t a = clock();
+    double a = CycleTimer::currentSeconds();
 
     //Maze_ADT maze = Maze_2dLattice();
     UF_Serial UF = UF_Serial(maze.getNumberOfVertices());
 	bool correct = TEST->test(maze, UF, CHECK_CORRECTNESS);
 
-	clock_t b = clock();
+    double b = CycleTimer::currentSeconds();
+
 
 	if(CHECK_CORRECTNESS)
 	  cout << "--Correctness: " << correct << endl;
@@ -160,15 +162,15 @@ clock_t maze_serial(Tester * TEST, Maze_ADT &maze)
 }
 
 
-clock_t maze_parrallel(Tester * TEST, UF_ADT * (*func_create)(int), int num_threads, Maze_ADT &maze)
+double maze_parrallel(Tester * TEST, UF_ADT * (*func_create)(int), int num_threads, Maze_ADT &maze)
 {
 
-    clock_t a = clock();
+    double a = CycleTimer::currentSeconds();
 
 	UF_ADT * UF = func_create(maze.getNumberOfVertices());
 	bool correct = TEST -> test_parallel(maze, *UF, num_threads, CHECK_CORRECTNESS);
 
-	clock_t b = clock();
+	double b = CycleTimer::currentSeconds();
 
 	if(CHECK_CORRECTNESS)
 	  cout << "--Correctness: " << correct << endl;
@@ -182,9 +184,9 @@ void printParrallelDescription(string name)
     cout << "Parrallel " << THREAD_NUM <<"-threads, " << name << endl;
 }
 
-void printTotalTime(clock_t time)
+void printTotalTime(double time)
 {
-	cout << "--Total Time = " << time/1000 << "kilo clockticks" << endl;
+	cout << "--Total Time = " << time*1000 << "milli seconds" << endl;
 }
 
 int main()
@@ -202,15 +204,17 @@ int main()
 
     println("Starting the maze testing.");
 
+	/*
 	Maze_2dLattice maze = Maze_2dLattice(SIZE);
 	cout << "maze = Lattice, size = " << SIZE << endl;
-
-	/*
-	Maze_Dense maze = Maze_Dense(SIZE);
-	cout << "maze = Dense, size = " << SIZE << endl;
 	*/
 
-	clock_t time;
+	SIZE*=4;
+	Maze_Dense maze = Maze_Dense(SIZE);
+	cout << "maze = Dense, size = " << SIZE << endl;
+
+
+	double time;
 	cout << "UF-Serial." << endl;
 	time = maze_serial(TEST, maze);
 	printTotalTime(time);
@@ -219,13 +223,19 @@ int main()
 	time = maze_parrallel(TEST, &create_UF_FULL_LOCKING, THREAD_NUM, maze);
 	printTotalTime(time);
 
+	printParrallelDescription("HAND over HAND.");
+	time = maze_parrallel(TEST, &create_UF_HAND_OVER_HAND_LOCKING, THREAD_NUM, maze);
+	printTotalTime(time);
+
 	printParrallelDescription("CAS, No Path Compression");
 	time = maze_parrallel(TEST, &create_UF_CAS_NPC, THREAD_NUM, maze);
 	printTotalTime(time);
 
-	printParrallelDescription("HAND over HAND, No Path Compression.");
-	time = maze_parrallel(TEST, &create_UF_HAND_OVER_HAND_LOCKING, THREAD_NUM, maze);
+
+	printParrallelDescription("CAS, Full Path Compression");
+	time = maze_parrallel(TEST, &create_UF_CAS_FPC, THREAD_NUM, maze);
 	printTotalTime(time);
+
 
 
 	// Clean up memory.

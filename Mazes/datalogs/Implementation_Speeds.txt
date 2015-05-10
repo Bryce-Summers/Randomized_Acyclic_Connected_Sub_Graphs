@@ -74,3 +74,56 @@ UF_Serial Time = 1440 kilo clockticks
 Parrallel 4-threads, Full Locking Time = 6920 kilo clockticks
 Parrallel 4-threads, CAS, No Path Compression = 2900 kilo clockticks
 Parrallel 4-threads, HAND over HAND, No Path Compression = 7270 kilo clockticks
+
+
+5/10/15 1:52 AM
+// Better results. Correctness checks on.
+
+Serialmaze = Lattice, size = 1000
+UF Serial.
+--loop time = 440.595Kilo Clocks.
+--Total Time = 1440.52milli seconds
+Parrallel 4-threads, Full Locking.
+--loop time = 1785.05ms.
+--Total Time = 3188.63milli seconds
+Parrallel 4-threads, HAND over HAND.
+--loop time = 1378.78ms.
+--Total Time = 3027.62milli seconds
+Parrallel 4-threads, CAS, No Path Compression
+--loop time = 420.381ms.
+--Total Time = 1955.27milli seconds
+Parrallel 4-threads, CAS, Full Path Compression
+--loop time = 453.433ms.
+--Total Time = 2076.52milli seconds
+
+2:10 am
+Dense maze timings.
+
+maze = Dense, size = 8000
+UF-Serial.
+--loop time = 1900.8 milli seconds.
+--Total Time = 16957.9milli seconds
+Parrallel 8-threads, Full Locking.
+--loop time = 20843.3ms.
+--Total Time = 41230.5milli seconds
+Parrallel 8-threads, HAND over HAND.
+--loop time = 28773.4ms.
+--Total Time = 49446.8milli seconds
+Parrallel 8-threads, CAS, No Path Compression
+--loop time = 898.884ms.
+--Total Time = 21691.7milli seconds
+Parrallel 8-threads, CAS, Full Path Compression
+--loop time = 1022.05ms.
+--Total Time = 21972.1milli seconds
+
+
+maze = Dense, size = 8000
+UF-Serial: 1900.8 milli seconds.
+Parrallel 8-threads.
+Full Locking: 20843.3ms.
+HAND over HAND: 28773.4ms.
+Lock Free, No Path Compression: 898.884ms.
+Lock Free, Full Path Compression: 1022.05ms.
+
+
+

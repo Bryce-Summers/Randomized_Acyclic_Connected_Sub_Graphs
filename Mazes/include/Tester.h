@@ -17,6 +17,8 @@ using namespace std;
 #include "Edge.h"
 
 #include <thread>
+#include "CycleTimer.h"
+
 
 class Tester
 {
