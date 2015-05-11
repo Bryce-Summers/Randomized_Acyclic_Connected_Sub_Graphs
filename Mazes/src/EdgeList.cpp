@@ -19,8 +19,7 @@ void EdgeList::shuffle()
 	  return;
   }
 
-  srand(time(0));
-
+  srand(0);
   // Randomly choose pairs of edges to swap.
   for(int i = 0; i < len; i++)
   {
