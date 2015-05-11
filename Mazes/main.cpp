@@ -32,10 +32,10 @@ using namespace std;
 #define VERBOSE
 
 const bool CHECK_CORRECTNESS = false;
-int TTR = 3;
+int TTR = 10;
 
 // The problem size. Vertices = SIZE^2;
-int SIZE = 2000;
+int SIZE = 4000;
 //int SIZE = 10;
 
 int THREAD_NUM = 8;
@@ -256,46 +256,42 @@ int main()
 	printTotalTime(time);
 */
 
-    for (int i=0; i < TTR; i++) {
-  
 	printParrallelDescription("CAS, No Path Compression");
-	time = maze_parrallel(TEST, &create_UF_CAS_NPC, THREAD_NUM, maze);
-	printTotalTime(time);
-
+    for (int i=0; i < TTR; i++) {
+        time = maze_parrallel(TEST, &create_UF_CAS_NPC, THREAD_NUM, maze);
     }
 
-    for (int i=0; i < TTR; i++) {
-
 	printParrallelDescription("CAS, Full Path Compression");
-	time = maze_parrallel(TEST, &create_UF_CAS_FPC, THREAD_NUM, maze);
-	printTotalTime(time);
+    for (int i=0; i < TTR; i++) {
+        time = maze_parrallel(TEST, &create_UF_CAS_FPC, THREAD_NUM, maze);
 	}
 
     int k;
-    for (int i=0; i < TTR; i++) {
+    printParrallelDescription("CAS, Constrained Path Compression with k=n/5");
 
-    k = maze.getNumberOfVertices() / 10;
+    for (int i=0; i < TTR; i++) {
+        k = maze.getNumberOfVertices() /5;
+        time = maze_parrallel_arg(TEST, &create_UF_CAS_CPC_arg, THREAD_NUM, maze, k);
+    }
+
     printParrallelDescription("CAS, Constrained Path Compression with k=n/10");
-	time = maze_parrallel_arg(TEST, &create_UF_CAS_CPC_arg, THREAD_NUM, maze, k);
-	printTotalTime(time);
-
-    }
 
     for (int i=0; i < TTR; i++) {
+        k = maze.getNumberOfVertices() / 10;
+        time = maze_parrallel_arg(TEST, &create_UF_CAS_CPC_arg, THREAD_NUM, maze, k);
+    }
 
-    k = maze.getNumberOfVertices() / 100;
     printParrallelDescription("CAS, Constrained Path Compression with k=n/100");
-	time = maze_parrallel_arg(TEST, &create_UF_CAS_CPC_arg, THREAD_NUM, maze, k);
-	printTotalTime(time);
+    for (int i=0; i < TTR; i++) {
+        k = maze.getNumberOfVertices() / 100;
+        time = maze_parrallel_arg(TEST, &create_UF_CAS_CPC_arg, THREAD_NUM, maze, k);
     }
 
 
-    for (int i=0; i < TTR; i++) {
-
-    k = sqrt(maze.getNumberOfVertices());
     printParrallelDescription("CAS, Constrained Path Compression with k=sqrt(n)");
+    for (int i=0; i < TTR; i++) {
+    k = sqrt(maze.getNumberOfVertices());
 	time = maze_parrallel_arg(TEST, &create_UF_CAS_CPC_arg, THREAD_NUM, maze, k);
-	printTotalTime(time);
     }
 
 
