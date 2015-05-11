@@ -19,6 +19,8 @@ void EdgeList::shuffle()
 	  return;
   }
 
+  srand(time(0));
+
   // Randomly choose pairs of edges to swap.
   for(int i = 0; i < len; i++)
   {
@@ -102,6 +104,11 @@ void EdgeList::append(EdgeList * other)
 std::string EdgeList::edge_string(int index)
 {
   return "(" + std::to_string(vertex1[index]) + ", " +  std::to_string(vertex2[index]) + ")\n";
+}
+
+std::string EdgeList::edge_string2(int index)
+{
+  return std::to_string(vertex1[index]) + ", " +  std::to_string(vertex2[index]) + ", ";
 }
 
 // Returns the number of edges in this edge list.

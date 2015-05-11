@@ -58,6 +58,7 @@ class EdgeList
 		int size();
 
 		std::string edge_string(int index);
+		std::string edge_string2(int index);
 
 
     protected:

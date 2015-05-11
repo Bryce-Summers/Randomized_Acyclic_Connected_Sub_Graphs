@@ -34,6 +34,7 @@ const bool CHECK_CORRECTNESS = true;
 
 // The problem size. Vertices = SIZE^2;
 int SIZE = 2000;
+//int SIZE = 10;
 
 int THREAD_NUM = 8;
 
@@ -204,15 +205,14 @@ int main()
 
     println("Starting the maze testing.");
 
-	/*
+	//*
 	Maze_2dLattice maze = Maze_2dLattice(SIZE);
 	cout << "maze = Lattice, size = " << SIZE << endl;
-	*/
-
-	SIZE*=4;
+	//*/
+	/*
 	Maze_Dense maze = Maze_Dense(SIZE);
 	cout << "maze = Dense, size = " << SIZE << endl;
-
+	//*/
 
 	double time;
 	cout << "UF-Serial." << endl;

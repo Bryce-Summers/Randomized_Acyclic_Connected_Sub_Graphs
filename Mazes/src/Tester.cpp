@@ -143,6 +143,17 @@ bool Tester::test(Maze_ADT &maze, UF_ADT &UF, bool test_correctness)
 
    cout << "--loop time = " << (b - a)*1000 <<  " milli seconds." << endl;
 
+   // Formatted maze output.
+   /*
+   len = output->size();
+   for(int i = 0; i < len; i++)
+   {
+	 cout << output -> edge_string2(i);
+   }
+   cout << endl;
+   */
+
+
    // -- Handle Correctness.
 
    bool result = true;
