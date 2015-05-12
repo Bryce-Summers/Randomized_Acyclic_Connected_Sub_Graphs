@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.9.9)  11 MAY 2015 21:00
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.9.9)  11 MAY 2015 21:11
 entering extended mode
  %&-line parsing enabled.
 **writeup.tex
@@ -321,18 +321,18 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./images/Lattice2.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 75--76
+Underfull \hbox (badness 10000) in paragraph at lines 76--77
 
  []
 
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 79.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 80.
 (/usr/share/texmf-texlive/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 79.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 80.
 
-Underfull \hbox (badness 10000) in paragraph at lines 99--100
+Underfull \hbox (badness 10000) in paragraph at lines 100--101
 
  []
 
@@ -343,143 +343,149 @@ Package Fancyhdr Warning: \headheight is too small (13.59999pt):
  This may cause the page layout to be inconsistent, however.
 
 [2]
-Underfull \hbox (badness 10000) in paragraph at lines 135--136
+Underfull \hbox (badness 10000) in paragraph at lines 138--139
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 144--145
+Underfull \hbox (badness 10000) in paragraph at lines 147--148
 
  []
 
 [3]
-Underfull \hbox (badness 10000) in paragraph at lines 159--160
+Underfull \hbox (badness 10000) in paragraph at lines 162--163
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 161--163
+Underfull \hbox (badness 10000) in paragraph at lines 164--166
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 165--166
+Underfull \hbox (badness 10000) in paragraph at lines 168--169
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 180--181
+Underfull \hbox (badness 10000) in paragraph at lines 183--184
 
  []
 
 [4]
-Underfull \hbox (badness 10000) in paragraph at lines 198--199
+Underfull \hbox (badness 10000) in paragraph at lines 201--202
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 217--218
+Underfull \hbox (badness 10000) in paragraph at lines 220--221
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 223--224
+Underfull \hbox (badness 10000) in paragraph at lines 226--227
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 235--236
+Underfull \hbox (badness 10000) in paragraph at lines 238--239
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 237--238
+Underfull \hbox (badness 10000) in paragraph at lines 240--241
 
  []
 
 [5]
-Overfull \hbox (315.14473pt too wide) in paragraph at lines 259--259
+Overfull \hbox (315.14473pt too wide) in paragraph at lines 262--262
 [] 
  []
 
 [6] [7]
-Underfull \hbox (badness 10000) in paragraph at lines 301--303
+Underfull \hbox (badness 10000) in paragraph at lines 304--306
 
  []
 
 [8] [9]
-Underfull \hbox (badness 10000) in paragraph at lines 374--375
+Underfull \hbox (badness 10000) in paragraph at lines 377--378
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 380--381
+Underfull \hbox (badness 10000) in paragraph at lines 383--384
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 386--387
+Underfull \hbox (badness 10000) in paragraph at lines 389--390
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 392--393
+Underfull \hbox (badness 10000) in paragraph at lines 395--396
 
  []
 
 [10]
-Underfull \hbox (badness 10000) in paragraph at lines 404--405
+Underfull \hbox (badness 10000) in paragraph at lines 407--408
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 407--409
+Underfull \hbox (badness 10000) in paragraph at lines 410--412
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 412--413
+Underfull \hbox (badness 10000) in paragraph at lines 415--416
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 422--423
+Underfull \hbox (badness 10000) in paragraph at lines 425--426
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 426--427
+Underfull \hbox (badness 10000) in paragraph at lines 429--430
 
  []
 
-[11] [12] [13]
-<images/Edge-connected-2D-Lattice.png, id=124, 590.95781pt x 408.77719pt>
+[11]
+Overfull \hbox (19.668pt too wide) in paragraph at lines 448--449
+[][]$\OT1/cmtt/m/n/10.95 https : / / github . com / Bryce-[]Summers / Randomize
+d _ Acyclic _ Connected _ Sub _ Graphs / tree / master /
+ []
+
+[12] [13]
+<images/Edge-connected-2D-Lattice.png, id=126, 590.95781pt x 408.77719pt>
 File: images/Edge-connected-2D-Lattice.png Graphic file (type png)
 
 <use images/Edge-connected-2D-Lattice.png>
-<images/K8.png, id=125, 752.8125pt x 752.8125pt>
+<images/K8.png, id=127, 752.8125pt x 752.8125pt>
 File: images/K8.png Graphic file (type png)
  <use images/K8.png>
-<images/Lattice1.png, id=126, 1003.75pt x 1003.75pt>
+<images/Lattice1.png, id=128, 1003.75pt x 1003.75pt>
 File: images/Lattice1.png Graphic file (type png)
  <use images/Lattice1.png>
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<images/Dense2.png, id=127, 1003.75pt x 1003.75pt>
+<images/Dense2.png, id=129, 1003.75pt x 1003.75pt>
 File: images/Dense2.png Graphic file (type png)
  <use images/Dense2.png>
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<images/UncompressedPath.png, id=128, 249.18094pt x 513.41812pt>
+<images/UncompressedPath.png, id=130, 249.18094pt x 513.41812pt>
 File: images/UncompressedPath.png Graphic file (type png)
 
 <use images/UncompressedPath.png>
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<images/FullPathCompression.png, id=129, 249.18094pt x 513.41812pt>
+<images/FullPathCompression.png, id=131, 249.18094pt x 513.41812pt>
 File: images/FullPathCompression.png Graphic file (type png)
 
 <use images/FullPathCompression.png>
@@ -487,7 +493,7 @@ File: images/FullPathCompression.png Graphic file (type png)
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
-<images/ContstrainedPathCompression-k2.png, id=131, 249.18094pt x 513.41812pt>
+<images/ContstrainedPathCompression-k2.png, id=133, 249.18094pt x 513.41812pt>
 File: images/ContstrainedPathCompression-k2.png Graphic file (type png)
 
 <use images/ContstrainedPathCompression-k2.png>
@@ -495,28 +501,28 @@ File: images/ContstrainedPathCompression-k2.png Graphic file (type png)
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
-<images/ContstrainedPathCompression-k3.png, id=134, 249.18094pt x 513.41812pt>
+<images/ContstrainedPathCompression-k3.png, id=136, 249.18094pt x 513.41812pt>
 File: images/ContstrainedPathCompression-k3.png Graphic file (type png)
 
 <use images/ContstrainedPathCompression-k3.png>
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<images/Results-Locking.png, id=137, 885.3075pt x 530.98375pt>
+<images/Results-Locking.png, id=139, 885.3075pt x 530.98375pt>
 File: images/Results-Locking.png Graphic file (type png)
 
 <use images/Results-Locking.png>
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<images/LockFreeTimings.png, id=138, 631.158pt x 464.33475pt>
+<images/LockFreeTimings.png, id=140, 631.158pt x 464.33475pt>
 File: images/LockFreeTimings.png Graphic file (type png)
 
 <use images/LockFreeTimings.png>
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<images/PerformanceScaling.png, id=139, 922.44624pt x 528.97626pt>
+<images/PerformanceScaling.png, id=141, 922.44624pt x 528.97626pt>
 File: images/PerformanceScaling.png Graphic file (type png)
 
 <use images/PerformanceScaling.png>
@@ -544,9 +550,9 @@ ts/cm/cmmi10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr10
 hare/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-te
 xlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts
 /type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on writeup.pdf (20 pages, 520525 bytes).
+Output written on writeup.pdf (20 pages, 521684 bytes).
 PDF statistics:
- 215 PDF objects out of 1000 (max. 8388607)
+ 217 PDF objects out of 1000 (max. 8388607)
  51 named destinations out of 1000 (max. 500000)
  61 words of extra memory for PDF output out of 10000 (max. 10000000)
 

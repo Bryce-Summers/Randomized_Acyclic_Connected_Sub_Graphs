@@ -49,7 +49,7 @@
 \end{center}
 
 
-\question{Summary}
+\question{Abstract}
 
 We implemented \textbf{lock-free Union find structures} to parallelize an inherently serial random maze construction algorithm and therebye \textbf{solve the random maze construction problem faster.}\\
 
@@ -66,7 +66,8 @@ Using lock-free Union find structures, we achieved a consistent speedup using \t
 \href{https://github.com/Bryce-Summers/Randomized_Acyclic_Connected_Sub_Graphs}{Project Repository:}\\
 \url{https://github.com/Bryce-Summers/Randomized_Acyclic_Connected_Sub_Graphs} 
 
-
+Feel free to peruse the figures in the back of this paper.\\
+Thank you for Reading this paper.
 
 \newpage
 
@@ -97,7 +98,7 @@ In this section we present our definitions and representations of the objects us
 \item A \textbf{Maze} is an acyclic connected graph. $\leftrightarrow$
 \item A \textbf{Maze} is a spanning tree of a maze space. $\leftrightarrow$
 \item A \textbf{Maze} is a connected graph with $N$ vertices and $N - 1$ edges.\\
-\item A Maze $\mathcal{M}$ is said to be \textbf{in} a Maze Space $\mathcal{S}$ iff $\mathcal{M}$ is a subgraph of $\mathcal{S}$.
+\item A Maze $\mathcal{M}$ is said to be \textbf{in} a Maze Space $\mathcal{S}$ if and only if $\mathcal{M}$ is a subgraph of $\mathcal{S}$.
 \item Please see Figure \ref{fig:Lattice-result} and Figure \ref{fig:Dense-result} on page  \pageref{fig:Lattice-result} for example mazes that we have generated.
 \end{itemize}
 
@@ -122,6 +123,8 @@ in Maze Space $\mathcal{S}$.
 We envision our work to be used by creative individuals involved in generating mazes, professional network planners, or circuit designers. Our algorithm should mostly be used for proving example graphs for an average user, so we want to achieve a speedup on a commodity machine using cpp threads, which mimics the systems that our users will likely have.
 
 We have tested our code on Andrew Unix using mainly 8 cpp threads. Our timing used the 418 cycle counter to measure the time spent in the critical for loop of the maze construction algorithm.
+
+We have also tried our best to compare executions using the same randomized permutations to try to prevent randomness from overly skewing our readings, but the results do vary depending on the paricular problem size and shuffling permutation.
 
 \question{Why Randomness?}
 
@@ -441,6 +444,8 @@ I was ready to give up on UF Lock Free Full Path compression, when my partner br
 I implemented a graph visualizer and visualized some outputs. That is when I realized that the procedure was not behaving randomly. We then worked on comparing executions on with the same random seeds to get better performance comparisons. We also tried computing average performances for different problems.
 
 We have copious performance data logs for different problems, with different sizes, and different values for the constrained path compression. Please feel free to look at the in our source code's datalogs folder.
+
+\url{https://github.com/Bryce-Summers/Randomized_Acyclic_Connected_Sub_Graphs/tree/master/Mazes/datalogs} 
 
 
 \newpage
