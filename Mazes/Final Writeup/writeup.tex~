@@ -1,0 +1,104 @@
+% You should title the file with a .tex extension (hw1.tex, for example)
+\documentclass[11pt]{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{fancyhdr}
+\usepackage{enumerate}
+
+\oddsidemargin0cm
+\topmargin-2cm     %I recommend adding these three lines to increase the 
+\textwidth16.5cm   %amount of usable space on the page (and save trees)
+\textheight23.5cm  
+
+\newcommand{\question}[2] {\vspace{.25in} \hrule\vspace{0.5em}
+\noindent{\bf #1: #2} \vspace{0.5em}
+\hrule \vspace{.10in}}
+\renewcommand{\part}[1] {\vspace{.10in} {\bf (#1)}}
+
+\newcommand{\myname}{Bryce Summers, Brandon Lum}
+\newcommand{\myandrew}{bwsummer, jiajunbl}
+\newcommand{\myhwnum}{4}
+\newcommand{\bigO}{\mathcal{O}}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 1pt}
+ 
+\pagestyle{fancyplain}
+\lhead{\fancyplain{}{\textbf{HW\myhwnum}}}      % Note the different brackets!
+\rhead{\fancyplain{}{\myname\\ \myandrew}}
+\chead{\fancyplain{}{15-418}}
+
+\begin{document}
+
+\medskip                        % Skip a "medium" amount of space
+                                % (latex determines what medium is)
+                                % Also try: \bigskip, \littleskip
+
+\thispagestyle{plain}
+\begin{center}                  % Center the following lines
+{\Large 15-418 Assignment  \myhwnum} \\
+\myname \\
+\myandrew \\
+
+\today \\
+\end{center}
+
+
+\question{Webserver Design Documentation}\\
+
+\textbf{Work Distribution}\\
+
+We assign work to idle cores on the running worker nodes.
+We never assign more than one \textbf{projectidea} job to a worker node, because otherwise we might crash the worker node due to using too much memory.
+
+We always bias the distribution of work towards the lower indiced proccessors to enable the shutting down of higher indexed proccessors during times of minimal work.\\
+
+\textbf{Master job serving}\\
+
+The master node serves jobs using a 3 priority system. The master serves \textbf{projectidea} jobs first, because they are the most important and can only be assigned one per server, then \textbf{tellmenow} jobs, because they have a strict latency requirement, then all of the other jobs.
+
+The Master distributes first distributes 12 jobs to each running worker node, because they only achieve 24 execution contexts through 2 way hyperthreading. The master only distributes more jobs up to 24 when every node ahs at least 12 jobs running. To allow for maximum adaptibility and minimal thinking on the worker's part, we only distribute jobs to a worker that has an idle execution context. We are able to do this efficiently due to the very low amount of information that needs to be communicated for each request.\\
+
+
+\textbf{Compare Primes}\\
+
+To simplify the other systems, we decompose Compare Primes into 4 count prime jobs. This allows us to cache the sub jobs, distribute the work more evenly, and minimize the size of these jobs.
+
+To facilitate the tracking of these linked count primes jobs, we use a structure we call a \textbf{work roster} that serves to collect completed associated jobs and knows which post processing function should be called to combine the results into a final composite result.\\
+
+\newpage
+
+\textbf{Cache}\\
+
+We have implemented a caching system that stores requests of various types within maps that map singular input parameters to output strings.\\
+
+Because we have decomposed compare primes into count primes, there are no requests that take more than one parameter, which simplfies the design of the cache. Also, due to this decomposition we can cache sub prime counting tasks instead of full compare primes tasks. This allows us much greater possibilities for saving work in compare primes task proccessing and also allows us to use the results of compare prime tasks in normal count primes tasks that come along.\\
+
+
+\textbf{Worker Scaling}\\
+
+We boot up more worker nodes if we are utilizing the current worker nodes to their full capacity and have a backlog of nodes in the master's distribution queues.
+
+We shut down worker nodes if we are able to assign 12 jobs to each of the worker nodes such that the last indiced node does not have a job assigned to it. This policy is beautifully akin to the way an unbounded array might be desized although slightly disparate.
+
+
+\textbf{Zombie Queue}
+Much like real webservers, our implementation gives up on some of the requests in favor of serving a greater number within the time bounds. We mark these requests as zombies and serve them only after all other the newer traces have been served.
+
+\textbf{tellmenow requests direct proccessing}
+
+We have decided that instead of mappint tellmenow requests to their own execution contexts, we instead directly proccess them as soon as they are on a worker node. Because of their limited execution time, they do not block the worker nodes. This allows us to serve the tellmenow requests within the desired latency bounds.
+
+\textbf{Experimentation}\\
+
+We ran some traces on latedays and noticed that our workers were not being scaled down proeprly. This led us to put some more thought into the reaping of our proccesses.
+
+We found that compare primes was not functioning properly, so we realized that we were not properly decomposing them.
+
+We found that for one of the traces we were not serving tasks efficiently enough, so we thought about having a scheme where we give up on some jobs in order to better serve the rest of the jobs. For instance we might take horrible latency on one job to many more jobs run within the latency requirements instead of all of the jobs being just barely outside of the latency requirements.
+
+We have also considered reserving a thread for tellmenow requests to serve them in a dedicated manner. We then realized that since tellmenow requests have very low latency requirements coupled with a low proccessing time, we decided to forward and handle tellmenow requests in the first arbitrary node that is running. Since they take very little time to compute, they effectivly do not block the worker thread.
+
+\end{document}
+
