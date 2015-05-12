@@ -5,6 +5,8 @@
 \usepackage{amssymb}
 \usepackage{fancyhdr}
 \usepackage{enumerate}
+\usepackage{hyperref}
+
 
 \usepackage{graphicx}
 \graphicspath{ {images/} }
@@ -60,6 +62,9 @@ Using lock-free Union find structures, we achieved a consistent speedup using \t
 \caption{Example Generated Maze}
 \label{fig:TitlePage}
 \end{figure}
+
+\href{https://github.com/Bryce-Summers/Randomized_Acyclic_Connected_Sub_Graphs}{Project Repository:}\\
+\url{https://github.com/Bryce-Summers/Randomized_Acyclic_Connected_Sub_Graphs} 
 
 
 
@@ -148,14 +153,14 @@ For applications such the one discussed in this paper that operate on a contiguo
 
 \question{Traditional Serial Union Find Structure Implementation}
 
-\textbf{Canonical Elements}
+\textbf{Canonical Elements}\\
 Union find structures keep track of connected components by specifying canonical representatives for every one of the disjoint sets represented. Please see our powerpoint presentation for a visual of the main ideas behind a standard UF implementation. For a comprehensive treatment of the subject, pleas see [Tarjan].
 
-the canonical elements are also called roots, because they are at the root of the convergind set trees.
+the canonical elements are also called roots, because they are at the root of the convergind set trees.\\
 
 \textbf{Parent Pointer Array}\\
+Union Find structures create paths from nodes to their canonical elements by maintaining an array $A$ of integers, where the parent of vertice i is at $A[i]$. A vertice $v$ is defined to be the canonical element of its set iff $A[v] = v$.\\
 
-Union Find structures create paths from nodes to their canonical elements by maintaining an array $A$ of integers, where the parent of vertice i is at $A[i]$. A vertice $v$ is defined to be the canonical element of its set iff $A[v] = v$.
 
 \textbf{Find}\\
 \begin{itemize}
@@ -170,6 +175,7 @@ return v;
 \end{verbatim}
 
 \end{itemize}
+
 
 \textbf{Link}\\
 
@@ -186,6 +192,8 @@ void link(int root1, int root2)
 \end{verbatim}
 
 Since all elements in the set represented by root1 ($S$) had paths leading to root1 and root1 now points to root2, all elements in $S$ will now correctly return their canonical representative as root2 and the find and connected predicates will behave as expected.
+
+\newpage
 
 \textbf{Path Compression.}\\
 
@@ -279,6 +287,8 @@ The compare and swap operations allow us to store local variables containing the
 \textbf{Locking}
 
 We use cpp std:mutex objects for locking. We need to be careful to always take locks in decreasing order at all times to avoid deadlocking. It is also very important to not hold the root for to long, such as well searching for the second element in a union operation. If the root it held, then other threads waiting to get to the root may block the thread that is holding it from reaching the root agin, causing deadlock.
+
+\newpage
 
 \textbf{Test and Compare and Swap}
 
@@ -430,7 +440,7 @@ I was ready to give up on UF Lock Free Full Path compression, when my partner br
 
 I implemented a graph visualizer and visualized some outputs. That is when I realized that the procedure was not behaving randomly. We then worked on comparing executions on with the same random seeds to get better performance comparisons. We also tried computing average performances for different problems.
 
-We have copious performance data logs for different problems, with different sizes, and different values for the constrained path compression. Please feel free to look at the in our source code's datallogs folder.
+We have copious performance data logs for different problems, with different sizes, and different values for the constrained path compression. Please feel free to look at the in our source code's datalogs folder.
 
 
 \newpage
@@ -442,6 +452,10 @@ For a fantastic description and Analysis of Serial Union Find Data structures, p
 
 Although lock free Union Find structures have been researched since at least the 1990's, we have not explicitly consulted with any  published literature while making our implementation descisions.
 
+\href{https://github.com/Bryce-Summers/Randomized_Acyclic_Connected_Sub_Graphs}{Please look at our official open source project repository:}\\
+\url{https://github.com/Bryce-Summers/Randomized_Acyclic_Connected_Sub_Graphs} 
+
+
 \question{Potential Future Work}
 
 Here are some questions and tasks that future researches might want to investigate.
@@ -452,6 +466,7 @@ Here are some questions and tasks that future researches might want to investiga
 \item Investigate having the algorithm terminate one $N - 1$ edges have been found?
 \item Do some more detailed investigating of the cache coherence properties of the system?
 \item What are the ideal k values of CPC for ideal results?
+\item When do FPC, NPC, and CPC work best?
 \end{itemize}
 
 

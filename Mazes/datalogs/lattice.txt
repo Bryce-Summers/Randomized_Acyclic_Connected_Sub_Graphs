@@ -1,0 +1,37 @@
+Program has started.
+Testing the implementations
+Unit Testing maze implementations
+Unit Testing UF implementations serially.
+--Testing UF Serial
+--Testing UF CAS Constrained Path compression.
+--Testing UF CAS Full Path Compression.
+--Testing UF Full global locking.
+--Testing UF Hand over hand locking.
+--Testing UF CAS No Path Compression.
+--Testing UF CAS Full Path Compression.
+Implementations Passed Unit Tests.
+Starting the maze testing.
+maze = Lattice, size = 4000
+UF-Serial.
+--loop time = 7017.95 milli seconds.
+--Total Time = 19266.6milli seconds
+Parrallel 8-threads, Full Locking.
+--loop time = 31139.1ms.
+--Total Time = 47093.5milli seconds
+Parrallel 8-threads, HAND over HAND.
+--loop time = 39454.4ms.
+--Total Time = 55614.8milli seconds
+Parrallel 8-threads, CAS, No Path Compression
+--loop time = 3938.46ms.
+Parrallel 8-threads, CAS, Full Path Compression
+--loop time = 4631.43ms.
+Parrallel 8-threads, CAS, Constrained Path Compression with k=n/5
+--loop time = 4341.56ms.
+Parrallel 8-threads, CAS, Constrained Path Compression with k=n/10
+--loop time = 4050.83ms.
+Parrallel 8-threads, CAS, Constrained Path Compression with k=n/100
+--loop time = 4357.44ms.
+Parrallel 8-threads, CAS, Constrained Path Compression with k=sqrt(n)
+--loop time = 4068.15ms.
+Clean up.
+Exiting. Have a nice day.
