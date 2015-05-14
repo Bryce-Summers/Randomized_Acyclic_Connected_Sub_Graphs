@@ -1,11 +1,12 @@
 # Randomized_Acyclic_Connected_Sub_Graphs
 A Final project for the 15-418 class at Carnegie Mellon University.
 
+Info
+-----
 
-TODO
-----
+Please see the following webpage for detailed information about this project.
+http://bryce-summers.github.io/Project_Pages/418Project2
 
-This README needs to be written and filled out.
 
 
 Visualization Tool
